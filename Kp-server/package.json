@@ -1,0 +1,20 @@
+{
+  "name": "kp-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "expo-server-sdk": "^3.7.0",
+    "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.1",
+    "morgan": "^1.10.0",
+    "sharp": "^0.32.1"
+  }
+}

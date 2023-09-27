@@ -1,0 +1,52 @@
+auth:
+
+jwtPrivateKey in auth.js
+*server* currently hardcoded private key
+we need to store it as env variable
+used to encrypt and decrypt payload for auth
+
+issue with authnavigator
+need to wrap it 
+**** By placing the AuthNavigator component inside the NavigationContainer and wrapping it with the AuthContext.Provider, you ensure that the AuthContext is accessible to the AuthNavigator component and any child components that use the useContext hook.
+
+need to add protection to certain endpoints
+
+be able to reload and still be logged in
+ 
+need to update server with middleware
+
+get apploading fixed
+  if (!isReady)
+    return (
+      <AppLoading startAsync={restoreUser} onFinish={() => setIsReady(true)} />
+    );
+
+networking:
+
+- need to add progress bar
+- showing done animation
+- reset form
+
+-be able to add multiple photos
+
+
+
+cli version
+PS C:\Users\kpfb2\Desktop\Kp-app\AM2 - Copy (2)> expo --version
+WARNING: The legacy expo-cli does not support Node +17. Migrate to the new local Expo CLI: https://blog.expo.dev/the-new-expo-cli-f4250d8e3421.
+6.3.9
+PS C:\Users\kpfb2\Desktop\Kp-app\AM2 - Copy (2)> 
+
+npm version
+PS C:\Users\kpfb2\Desktop\Kp-app\AM2 - Copy (2)> npm -v
+9.7.2
+
+
+thoughts
+- 
+- add things interested in, tick box (possible machine learning idea)
+
+
+
+possibly merge Card and CardBin into one
+basically same only icons
