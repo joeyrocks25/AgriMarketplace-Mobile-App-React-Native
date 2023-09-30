@@ -4,10 +4,12 @@ import {
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
 import Text from "./Text";
 import colors from "../config/colors";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import { BoxShadow } from "react-native-shadow";
 
 function Card({ title, subTitle, imageUrl, onPress, customHeight, distance }) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -17,47 +19,66 @@ function Card({ title, subTitle, imageUrl, onPress, customHeight, distance }) {
     // Perform additional action or logic here
   };
 
+  const cardWidth = Dimensions.get("window").width - 40;
+  const shadowWidth = cardWidth;
+
+  const shadowOpt = {
+    width: shadowWidth,
+    height: 300,
+    color: "#000",
+    border: 20,
+    radius: 30,
+    opacity: 0.07,
+    x: 0,
+    y: 5,
+    style: { marginVertical: 13 },
+  };
+
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={styles.card}>
-        <Image
-          style={[styles.image, { height: customHeight }]}
-          source={{ uri: imageUrl }}
-        />
-        <View style={styles.detailsContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title} numberOfLines={1}>
-              {title}
-            </Text>
-            {distance && (
-              <View style={styles.locationContainer}>
-                <FontAwesome name="map-marker" size={20} color="red" />
-                <Text style={styles.distance}>{distance} miles away</Text>
+      <View>
+        <BoxShadow setting={shadowOpt}>
+          <View style={styles.card}>
+            <Image
+              style={[styles.image, { height: customHeight }]}
+              source={{ uri: imageUrl }}
+            />
+            <View style={styles.detailsContainer}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title} numberOfLines={1}>
+                  {title}
+                </Text>
+                {distance && (
+                  <View style={styles.locationContainer}>
+                    <FontAwesome name="map-marker" size={20} color="red" />
+                    <Text style={styles.distance}>{distance} miles away</Text>
+                  </View>
+                )}
               </View>
-            )}
-          </View>
-          <View style={styles.subTitleContainer}>
-            <Text style={styles.subTitle} numberOfLines={2}>
-              {subTitle}
-            </Text>
+              <View style={styles.subTitleContainer}>
+                <Text style={styles.subTitle} numberOfLines={2}>
+                  {subTitle}
+                </Text>
 
-            <TouchableWithoutFeedback onPress={handleFavoritePress}>
-              <View
-                style={[
-                  styles.heartButton,
-                  isFavorite && styles.favoriteButton,
-                ]}
-              >
-                <AntDesign
-                  name={isFavorite ? "heart" : "hearto"}
-                  size={28}
-                  color={isFavorite ? "red" : "red"}
-                  style={styles.heartIcon}
-                />
+                <TouchableWithoutFeedback onPress={handleFavoritePress}>
+                  <View
+                    style={[
+                      styles.heartButton,
+                      isFavorite && styles.favoriteButton,
+                    ]}
+                  >
+                    <AntDesign
+                      name={isFavorite ? "heart" : "hearto"}
+                      size={28}
+                      color={isFavorite ? "red" : "red"}
+                      style={styles.heartIcon}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
               </View>
-            </TouchableWithoutFeedback>
+            </View>
           </View>
-        </View>
+        </BoxShadow>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -65,11 +86,12 @@ function Card({ title, subTitle, imageUrl, onPress, customHeight, distance }) {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 15,
+    borderRadius: 9,
     backgroundColor: colors.white,
     marginBottom: 20,
     overflow: "hidden",
     height: 300,
+    width: "100%",
   },
   detailsContainer: {
     padding: 20,
