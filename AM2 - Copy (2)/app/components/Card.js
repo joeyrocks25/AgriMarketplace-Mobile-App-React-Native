@@ -21,7 +21,7 @@ function Card({ title, subTitle, imageUrl, onPress, customHeight, distance }) {
 
   // Calculate the shadow's width based on the card's width
   const cardWidth = Dimensions.get("window").width - 40; // Adjust as needed
-  const shadowWidth = "101%";
+  const shadowWidth = cardWidth;
 
   const shadowOpt = {
     width: shadowWidth, // Set the shadow's width dynamically
