@@ -17,7 +17,13 @@ const DistanceCalculator = ({ location1, location2 }) => {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distanceInKm = R * c;
     const distanceInMiles = distanceInKm * 0.621371; // Conversion from kilometers to miles
-    return distanceInMiles.toFixed(2); // Distance in miles rounded to 2 decimal places
+
+    const roundedDistance =
+      Math.abs(distanceInMiles - Math.round(distanceInMiles)) < 0.01
+        ? Math.round(distanceInMiles) // Round to the nearest integer if very close
+        : distanceInMiles.toFixed(1); // Otherwise, round to 1 decimal place
+
+    return roundedDistance.toString();
   };
 
   // Function to convert degrees to radians
