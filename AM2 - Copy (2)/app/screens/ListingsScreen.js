@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet, View, Text } from "react-native";
+import { FlatList, StyleSheet, View, Text, Dimensions } from "react-native";
 
 import ActivityIndicator from "../components/ActivityIndicator";
 import Button from "../components/Button";
@@ -14,6 +14,7 @@ import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import useLocation from "../hooks/useLocation";
 import DistanceCalculator from "../components/DistanceCalculator";
+import { BoxShadow } from "react-native-shadow";
 
 function ListingsScreen({ navigation }) {
   const route = useRoute();
@@ -32,7 +33,18 @@ function ListingsScreen({ navigation }) {
     console.log("Location is not available");
   }
 
-  // console.log("User Location:", userLocation); // Log userLocation here
+  // Define shadow options for the categoryName
+  const categoryNameShadowOpt = {
+    width: Dimensions.get("window").width - 40,
+    height: 40, // Height of the categoryName container
+    color: "#000",
+    border: 10,
+    radius: 15,
+    opacity: 0.15,
+    x: 0,
+    y: 5, // Offset it slightly below the categoryName container
+    style: { marginVertical: 10 },
+  };
 
   const getListingsApi = useApi(() =>
     listingsApi.getListings(null, categoryId)
@@ -44,15 +56,18 @@ function ListingsScreen({ navigation }) {
 
   return (
     <Screen style={styles.screen}>
-      <View style={[styles.categoryHUD, { backgroundColor: categoryColor }]}>
-        <MaterialCommunityIcons
-          name="check"
-          size={20}
-          color={colors.white}
-          style={styles.checkIcon}
-        />
-        <AppText style={styles.categoryText}>{categoryName}</AppText>
-      </View>
+      {/* Apply shadow to the categoryName */}
+      <BoxShadow setting={categoryNameShadowOpt}>
+        <View style={[styles.categoryHUD, { backgroundColor: categoryColor }]}>
+          <MaterialCommunityIcons
+            name="check"
+            size={20}
+            color={colors.white}
+            style={styles.checkIcon}
+          />
+          <AppText style={styles.categoryText}>{categoryName}</AppText>
+        </View>
+      </BoxShadow>
       {getListingsApi.loading ? (
         <ActivityIndicator visible={true} />
       ) : (
@@ -61,9 +76,9 @@ function ListingsScreen({ navigation }) {
             data={getListingsApi.data}
             keyExtractor={(listing) => listing.id.toString()}
             renderItem={({ item }) => {
-              console.log("Rendering Listing:", item.title); // Log the title of the listing being rendered
-              console.log("User Location:", userLocation); // Log userLocation here
-              console.log("Listing Location:", item.location); // Log item.location here
+              console.log("Rendering Listing:", item.title);
+              console.log("User Location:", userLocation);
+              console.log("Listing Location:", item.location);
 
               const distance =
                 userLocation && item.location ? (
@@ -114,7 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    marginBottom: 10,
+    marginBottom: 0,
   },
   checkIcon: {
     marginRight: 10,
