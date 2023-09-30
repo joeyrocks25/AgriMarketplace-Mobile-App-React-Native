@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
@@ -11,14 +11,16 @@ import colors from "../config/colors";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import { BoxShadow } from "react-native-shadow";
 
-function Card({ title, subTitle, imageUrl, onPress, customHeight, distance }) {
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const handleFavoritePress = () => {
-    setIsFavorite(!isFavorite);
-    // Perform additional action or logic here
-  };
-
+function Card({
+  title,
+  subTitle,
+  imageUrl,
+  onPress,
+  customHeight,
+  distance,
+  isFavorite,
+  onFavoritePress, // Receive favorite press handler
+}) {
   const cardWidth = Dimensions.get("window").width - 40;
   const shadowWidth = cardWidth;
 
@@ -60,7 +62,7 @@ function Card({ title, subTitle, imageUrl, onPress, customHeight, distance }) {
                   {subTitle}
                 </Text>
 
-                <TouchableWithoutFeedback onPress={handleFavoritePress}>
+                <TouchableWithoutFeedback onPress={onFavoritePress}>
                   <View
                     style={[
                       styles.heartButton,
