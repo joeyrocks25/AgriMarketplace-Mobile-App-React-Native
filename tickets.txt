@@ -1,3 +1,4 @@
 1. test
 2. Change location to one decimal place
 3. Update styling for card and displaying listings
+4. Add functionality for heart button in listings
