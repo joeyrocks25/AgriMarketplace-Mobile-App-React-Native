@@ -1,20 +1,25 @@
-import React, { useEffect } from "react";
-import { FlatList, StyleSheet, View, Text, Dimensions } from "react-native";
-
+import React, { useEffect, useState } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
-import Button from "../components/Button";
 import Card from "../components/Card";
 import colors from "../config/colors";
 import listingsApi from "../api/listings";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
-import useApi from "../hooks/useApi";
-import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import useLocation from "../hooks/useLocation";
 import DistanceCalculator from "../components/DistanceCalculator";
 import { BoxShadow } from "react-native-shadow";
+import useAuth from "../auth/useAuth";
+import favouritesApi from "../api/favourites";
 
 function ListingsScreen({ navigation }) {
   const route = useRoute();
@@ -22,6 +27,7 @@ function ListingsScreen({ navigation }) {
   const categoryId = route.params?.categoryId;
   const categoryColor = route.params?.categoryColor;
   const categoryName = route.params?.categoryName;
+  const { user } = useAuth();
 
   let userLocation = null;
   if (location) {
@@ -53,6 +59,44 @@ function ListingsScreen({ navigation }) {
   useEffect(() => {
     getListingsApi.request();
   }, [categoryId]);
+
+  const [favorites, setFavorites] = useState([]);
+  const [isButtonDisabled, setButtonDisabled] = useState(false); // Add this state variable
+
+  const handleFavoritePress = async (listing) => {
+    try {
+      if (!isButtonDisabled) {
+        // Check if the button is disabled
+        // Disable the button
+        setButtonDisabled(true);
+
+        // Add to favorites
+        console.log("Adding to favorites:", listing.title);
+
+        // Create a new favourite object
+        const newFavourite = {
+          currentUserId: user.userId,
+          listingId: listing.id,
+          title: listing.title,
+          description: listing.description,
+          images: listing.images,
+          price: listing.price,
+          categoryId: listing.categoryId,
+          userId: listing.userId,
+          location: listing.location,
+        };
+
+        // Add the favorite
+        await favouritesApi.addFavourite(newFavourite);
+        console.log("Favorite added");
+
+        // Add the listing to favorites state
+        setFavorites([...favorites, listing]);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <Screen style={styles.screen}>
@@ -92,13 +136,15 @@ function ListingsScreen({ navigation }) {
                 <Card
                   title={item.title}
                   subTitle={"£" + item.price}
-                  subTitleStyle={styles.price}
                   imageUrl={item.images[0].url}
                   customHeight={200}
                   onPress={() =>
                     navigation.navigate(routes.LISTING_DETAILS, item)
                   }
                   distance={distance}
+                  isFavorite={favorites.some((fav) => fav.id === item.id)}
+                  onFavoritePress={() => handleFavoritePress(item)}
+                  isButtonDisabled={isButtonDisabled} // Pass the disabled state
                 />
               );
             }}
@@ -109,11 +155,6 @@ function ListingsScreen({ navigation }) {
               <AppText style={styles.errorText}>
                 Couldn't retrieve the listings.
               </AppText>
-              <Button
-                title="Retry"
-                onPress={getListingsApi.request}
-                style={styles.retryButton}
-              />
             </View>
           )}
         </>
@@ -151,19 +192,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
-  retryButton: {
-    alignSelf: "center",
-  },
   price: {
     color: colors.dark_green,
-  },
-  locationContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  distance: {
-    marginLeft: 5,
   },
 });
 
