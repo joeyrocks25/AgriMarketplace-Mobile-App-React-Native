@@ -22,12 +22,8 @@ import useApi from "../hooks/useApi";
 import ActivityIndicator from "../components/ActivityIndicator";
 import colors from "../config/colors";
 
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required().label("Username"),
-  name: Yup.string().required().label("Full Name"),
-  email: Yup.string().required().email().label("E-mail"),
-  password: Yup.string().required().min(4).label("Password"),
-});
+// Simplified Yup schema with no validation
+const validationSchema = Yup.object().shape({});
 
 function RegisterScreen() {
   const registerApi = useApi(usersApi.register);
@@ -75,7 +71,7 @@ function RegisterScreen() {
                   password: "",
                 }}
                 onSubmit={handleSubmit}
-                validationSchema={validationSchema}
+                // validationSchema={validationSchema}
               >
                 <View style={styles.fieldContainer}>
                   <ErrorMessage error={error} visible={error} />
@@ -92,13 +88,10 @@ function RegisterScreen() {
                     placeholder="Full name"
                   />
                   <FormField
-                    autoCapitalize="none"
                     autoCorrect={false}
                     icon="email"
-                    keyboardType="email-address"
                     name="email"
-                    placeholder="E-mail"
-                    textContentType="emailAddress"
+                    placeholder="email"
                   />
                   <FormField
                     autoCapitalize="none"
@@ -112,8 +105,8 @@ function RegisterScreen() {
                 </View>
                 <SubmitButton
                   title="Register"
-                  color={colors.middle_orange} // Set the button color to white
-                  style={styles.registerButton} // Add custom styles for the button
+                  color={colors.middle_orange}
+                  style={styles.registerButton}
                 />
               </Form>
             </View>

@@ -1,65 +1,67 @@
-import React from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-} from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, View, TouchableOpacity, Text, Dimensions } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 
 const categories = [
   {
-    backgroundColor: "#fc5c65",
+    backgroundColor: colors.livestock,
     icon: "cow",
     label: "Livestock",
     value: 1,
   },
   {
-    backgroundColor: "#fd9644",
+    backgroundColor: colors.machinery,
     icon: "toolbox",
     label: "Machinery",
     value: 2,
   },
   {
-    backgroundColor: "#fed330",
+    backgroundColor: colors.tractors,
     icon: "tractor",
     label: "Tractors",
     value: 3,
   },
   {
-    backgroundColor: "#26de81",
+    backgroundColor: colors.cars,
     icon: "car-multiple",
     label: "Cars",
     value: 4,
   },
   {
-    backgroundColor: "#2bcbba",
+    backgroundColor: colors.tools,
     icon: "hammer",
     label: "Tools",
     value: 5,
   },
   {
-    backgroundColor: "#778ca3",
+    backgroundColor: colors.other,
     icon: "application",
     label: "Other",
     value: 6,
   },
 ];
 
-function CategoryHUDScreen() {
+function CategoryHUDScreen({ onScreenFocus }) {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      console.log("CategorySelectScreen is focused2");
+      onScreenFocus && onScreenFocus(true);
+    } else {
+      console.log("CategorySelectScreen is unfocused2");
+      onScreenFocus && onScreenFocus(false);
+    }
+  }, [isFocused, onScreenFocus]);
 
   const handleButtonPress = (category) => {
-    navigation.navigate("Feed", {
-      screen: "Listings",
-      params: {
-        categoryId: category.value,
-        categoryColor: category.backgroundColor,
-        categoryName: category.label,
-      },
+    navigation.navigate("Listings", {
+      categoryId: category.value,
+      categoryColor: category.backgroundColor,
+      categoryName: category.label,
     });
   };
 
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white",
+    backgroundColor: colors.white,
   },
   title: {
     fontSize: 24,

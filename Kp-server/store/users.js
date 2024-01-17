@@ -13,6 +13,13 @@ const users = [
     email: "kp@gmail.com",
     password: "12345",
   },
+  {
+    id: 3,
+    username: "kcunningham123",
+    name: "KP Cunninghammm",
+    email: "1",
+    password: "1",
+  },
 ];
 
 function getUsers() {

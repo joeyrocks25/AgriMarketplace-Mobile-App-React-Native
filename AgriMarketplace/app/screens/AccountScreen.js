@@ -25,14 +25,14 @@ const menuItems = [
     },
     targetScreen: routes.USER_LISTINGS,
   },
-  {
-    title: "My Messages",
-    icon: {
-      name: "email",
-      backgroundColor: colors.medium,
-    },
-    targetScreen: routes.MESSAGES,
-  },
+  // {
+  //   title: "My Messages",
+  //   icon: {
+  //     name: "email",
+  //     backgroundColor: colors.medium,
+  //   },
+  //   targetScreen: routes.MESSAGES,
+  // },
   {
     title: "Saved Listings",
     icon: {

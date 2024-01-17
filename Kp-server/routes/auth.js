@@ -3,7 +3,6 @@ const router = express.Router();
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const usersStore = require("../store/users"); // Update the path accordingly
-const validateWith = require("../middleware/validation");
 
 // Define the validation schema for the request body
 const schema = Joi.object({
@@ -12,7 +11,7 @@ const schema = Joi.object({
 });
 
 // POST /api/auth
-router.post("/", validateWith(schema), (req, res) => {
+router.post("/", (req, res) => {
   const { email, password } = req.body;
 
   // Find the user by email
