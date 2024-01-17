@@ -20,7 +20,7 @@ function MessagesScreen(props) {
 
   useEffect(() => {
     loadConversations();
-  }, []);
+  }, [loadConversations]);
 
   const loadConversations = async () => {
     try {

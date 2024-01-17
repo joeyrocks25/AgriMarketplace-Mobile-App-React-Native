@@ -21,7 +21,7 @@ function Card({
   isFavorite,
   onFavoritePress, // Receive favorite press handler
 }) {
-  const cardWidth = Dimensions.get("window").width - 40;
+  const cardWidth = Dimensions.get("window").width - (Platform.OS === "android" ? 80 : 40);
   const shadowWidth = cardWidth;
 
   const shadowOpt = {
@@ -130,18 +130,15 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   heartButton: {
-    backgroundColor: colors.white,
+    backgroundColor: "transparent",
     width: 40,
     height: 40,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: colors.white,
   },
   favoriteButton: {
-    backgroundColor: colors.red,
-    borderColor: colors.red,
+    backgroundColor: "transparent",
   },
   heartIcon: {
     marginLeft: 2,
