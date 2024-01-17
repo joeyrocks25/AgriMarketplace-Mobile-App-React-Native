@@ -20,10 +20,8 @@ import authApi from "../api/auth";
 import useAuth from "../auth/useAuth";
 import colors from "../config/colors";
 
-const validationSchema = Yup.object().shape({
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
-});
+// Simplified Yup schema with no validation
+const validationSchema = Yup.object().shape({});
 
 function LoginScreen(props) {
   const auth = useAuth();
@@ -77,8 +75,8 @@ function LoginScreen(props) {
           />
           <SubmitButton
             title="Login"
-            color={colors.middle_orange} // Set the button color to white
-            style={styles.registerButton} // Add custom styles for the button
+            color={colors.middle_orange}
+            style={styles.registerButton}
           />
         </Form>
       </Screen>

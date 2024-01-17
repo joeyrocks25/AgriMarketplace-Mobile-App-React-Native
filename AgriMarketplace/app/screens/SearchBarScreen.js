@@ -14,8 +14,10 @@ import Card from "../components/Card";
 import DistanceCalculator from "../components/DistanceCalculator";
 import useLocation from "../hooks/useLocation";
 import { useFocusEffect } from "@react-navigation/native";
+import routes from "../navigation/routes";
 
 function SearchBarScreen({ navigation }) {
+
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -98,6 +100,7 @@ function SearchBarScreen({ navigation }) {
                 customHeight={200}
                 onPress={() => {
                   console.log("Pressed:", item.title);
+                  navigation.navigate(routes.LISTING_DETAILS, { item, origin: 'search' })
                 }}
                 distance={
                   location &&
@@ -128,17 +131,18 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     flex: 1,
+    padding: 20,
   },
   searchBar: {
     backgroundColor: "#f0f0f0",
     padding: 10,
     borderRadius: 10,
-    width: "90%",
-    marginTop: 70,
+    width: Platform.OS === 'android' ? "90%" : "100%",
     alignSelf: "center",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: Platform.OS === 'android' ? -10 : 20,
   },
   searchIcon: {
     marginRight: 10,
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     flex: 1,
-    padding: 20,
+    padding: Platform.OS === 'android' ? 20 : 0,
   },
   emptyStateContainer: {
     flex: 1,

@@ -12,11 +12,11 @@ const Stack = createStackNavigator();
 const AccountNavigator = () => (
   <Stack.Navigator>
     <Stack.Screen name="Account" component={AccountScreen} />
-    <Stack.Screen name="Messages" component={MessagesScreen} />
+    {/* <Stack.Screen name="Messages" component={MessagesScreen} /> */}
     <Stack.Screen name="My Listings" component={UserListingsScreen} />
     <Stack.Screen name="My Profile" component={UserProfile} />
     <Stack.Screen name="Saved Listings" component={UserFavouritesScreen} />
-    <Stack.Screen name="Conversation" component={MessagesConversation} />
+    {/* <Stack.Screen name="Conversation" component={MessagesConversation} /> */}
   </Stack.Navigator>
 );
 

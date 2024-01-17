@@ -20,6 +20,7 @@ import DistanceCalculator from "../components/DistanceCalculator";
 import { BoxShadow } from "react-native-shadow";
 import useAuth from "../auth/useAuth";
 import favouritesApi from "../api/favourites";
+import { Platform } from "react-native";
 
 function ListingsScreen({ navigation }) {
   const route = useRoute();
@@ -39,16 +40,17 @@ function ListingsScreen({ navigation }) {
     console.log("Location is not available");
   }
 
-  // Define shadow options for the categoryName
   const categoryNameShadowOpt = {
-    width: Dimensions.get("window").width - 40,
-    height: 40, // Height of the categoryName container
+    width: Platform.OS === "ios"
+      ? Dimensions.get("window").width - 40
+      : Dimensions.get("window").width - 80,
+    height: 40,
     color: "#000",
     border: 10,
     radius: 15,
     opacity: 0.15,
     x: 0,
-    y: 5, // Offset it slightly below the categoryName container
+    y: 5,
     style: { marginVertical: 10 },
   };
 
@@ -61,19 +63,12 @@ function ListingsScreen({ navigation }) {
   }, [categoryId]);
 
   const [favorites, setFavorites] = useState([]);
-  const [isButtonDisabled, setButtonDisabled] = useState(false); // Add this state variable
 
   const handleFavoritePress = async (listing) => {
     try {
-      if (!isButtonDisabled) {
-        // Check if the button is disabled
-        // Disable the button
-        setButtonDisabled(true);
+      if (!listing.isButtonDisabled) {
+        listing.isButtonDisabled = true;
 
-        // Add to favorites
-        console.log("Adding to favorites:", listing.title);
-
-        // Create a new favourite object
         const newFavourite = {
           currentUserId: user.userId,
           listingId: listing.id,
@@ -86,11 +81,9 @@ function ListingsScreen({ navigation }) {
           location: listing.location,
         };
 
-        // Add the favorite
         await favouritesApi.addFavourite(newFavourite);
         console.log("Favorite added");
 
-        // Add the listing to favorites state
         setFavorites([...favorites, listing]);
       }
     } catch (error) {
@@ -100,7 +93,6 @@ function ListingsScreen({ navigation }) {
 
   return (
     <Screen style={styles.screen}>
-      {/* Apply shadow to the categoryName */}
       <BoxShadow setting={categoryNameShadowOpt}>
         <View style={[styles.categoryHUD, { backgroundColor: categoryColor }]}>
           <MaterialCommunityIcons
@@ -139,12 +131,12 @@ function ListingsScreen({ navigation }) {
                   imageUrl={item.images[0].url}
                   customHeight={200}
                   onPress={() =>
-                    navigation.navigate(routes.LISTING_DETAILS, item)
+                    navigation.navigate(routes.LISTING_DETAILS, { item, origin: 'listings' })
                   }
                   distance={distance}
                   isFavorite={favorites.some((fav) => fav.id === item.id)}
                   onFavoritePress={() => handleFavoritePress(item)}
-                  isButtonDisabled={isButtonDisabled} // Pass the disabled state
+                  isButtonDisabled={item.isButtonDisabled}
                 />
               );
             }}
@@ -171,6 +163,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     marginBottom: 0,
+    maxWidth: Platform.OS === "ios" ? Dimensions.get("window").width - 10 : Dimensions.get("window").width - 80, // Set a different maxWidth for iOS
+    // alignSelf: "center", // Center the categoryHUD
   },
   checkIcon: {
     marginRight: 10,
