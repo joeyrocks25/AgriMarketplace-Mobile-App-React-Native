@@ -18,38 +18,6 @@ const getListingById = async (id) => {
   }
 };
 
-const getListings = async (userId, categoryId) => {
-  try {
-    const parsedUserId = userId ? parseInt(userId, 10) : null;
-    const parsedCategoryId = categoryId ? parseInt(categoryId, 10) : null;
-
-    let queryString = "";
-
-    if (parsedUserId) {
-      queryString += `userId=${parsedUserId}`;
-    }
-
-    if (parsedCategoryId) {
-      if (queryString !== "") {
-        queryString += "&";
-      }
-      queryString += `categoryId=${parsedCategoryId}`;
-    }
-
-    const fullEndpoint =
-      client.getBaseURL() +
-      endpoint +
-      (queryString !== "" ? `?${queryString}` : "");
-    console.log("API Endpoint:", fullEndpoint); // Log the endpoint
-
-    const response = await client.get(fullEndpoint);
-    return response;
-  } catch (error) {
-    console.error("Error:", error);
-    throw error;
-  }
-};
-
 export const addListing = async (listing, onUploadProgress) => {
   const data = new FormData();
   data.append("title", listing.title);
@@ -79,6 +47,38 @@ export const addListing = async (listing, onUploadProgress) => {
     });
 
     return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+const getListings = async (userId, categoryId) => {
+  try {
+    const parsedUserId = userId ? parseInt(userId, 10) : null;
+    const parsedCategoryId = categoryId ? parseInt(categoryId, 10) : null;
+
+    let queryString = "";
+
+    if (parsedUserId) {
+      queryString += `userId=${parsedUserId}`;
+    }
+
+    if (parsedCategoryId) {
+      if (queryString !== "") {
+        queryString += "&";
+      }
+      queryString += `categoryId=${parsedCategoryId}`;
+    }
+
+    const fullEndpoint =
+      client.getBaseURL() +
+      endpoint +
+      (queryString !== "" ? `?${queryString}` : "");
+    console.log("API Endpoint:", fullEndpoint); // Log the endpoint
+
+    const response = await client.get(fullEndpoint);
+    return response;
   } catch (error) {
     console.error("Error:", error);
     throw error;
