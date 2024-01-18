@@ -91,16 +91,16 @@ function MessagesConversation() {
             style={[
               styles.messageContainer,
               item.fromUserId === user.userId
-                ? styles.sentMessageContainer
-                : styles.receivedMessageContainer,
+                ? styles.receivedMessageContainer // Swap sent and received styles for the current user
+                : styles.sentMessageContainer,
             ]}
           >
             <View
               style={[
                 styles.messageBubble,
                 item.fromUserId === user.userId
-                  ? styles.sentBubble
-                  : styles.receivedBubble,
+                  ? styles.receivedBubble // Swap sent and received styles for the current user
+                  : styles.sentBubble,
               ]}
             >
               <Text style={styles.messageText}>{item.content}</Text>
@@ -109,6 +109,7 @@ function MessagesConversation() {
         )}
         inverted
       />
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -133,6 +134,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#ccc",
     padding: 8,
+    marginTop: 5,
   },
   input: {
     flex: 1,
