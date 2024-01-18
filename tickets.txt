@@ -1,18 +1,17 @@
-fixed feed for ios and android, so size fits both
-fixed heart so we can only favourite once per listing
-removed navbar for listingdetailsscreen and added static messagebox sender
-updated search so we can navigate to listings displayed
-fixed search for ios and android, so size fits both
-updated navigation for messages to conversations, works on ios and android now too
-state updates new messages when sending messages or refreshing
-removed messages from account section
-fixed headers and removed where appropriate
-fixed title and distance on listingsdetailsscreen so if title is too big doesn't push it off screen, moved above favourite, distance etc
-
-
-
-1. test
+1. test - Added MVP
 2. Change location to one decimal place
 3. Update styling for card and displaying listings
 4. Add functionality for heart button in listings
 5. Add email and username validation
+6. Big update - includes the following:
+  - fixed feed for ios and android, so size fits both
+  - fixed heart so we can only favourite once per listing
+  - removed navbar for listingdetailsscreen and added static messagebox sender
+  - updated search so we can navigate to listings displayed
+  - fixed search for ios and android, so size fits both
+  - updated navigation for messages to conversations, works on ios and android now too
+  - state updates new messages when sending messages or refreshing
+  - removed messages from account section
+  - fixed headers and removed where appropriate
+  - fixed title and distance on listingsdetailsscreen so if title is too big doesn't push it off screen, moved above favourite, distance etc
+7. Backlog + Value/effort matrix
