@@ -1,0 +1,77 @@
+(Backlog) To do:
+- Add tiles to listingdetailsscreen
+- Make listing user clickable to view their profile and other listings
+- View listings by location nearest
+- Ensure logged in user can't view 
+- Add multiple images that are swipable for listing or view more
+- Upload user profile photo
+- edit/delete profile
+- Need to fix navigation for swiping out of listingdetailsscreen
+- Rework listingeditscreen
+- Setup Card payment system for ads
+- Messages colour change to for send and received
+- Show if message read or not
+- Add uuid for messages
+- Add notifications
+- test location on android
+- Timer for listing posted
+- Delete user listing
+- Edit/Delete from favourites
+- Azure cloud infrastructure backend
+- content moderator for azure blob images
+- Possible support/assistance bot else contact info for help
+- Accessibility features?
+- Could improve search with algorithm or some sort of machine learning/ai 
+- Advertisements?
+- Reviews/feedback system?
+- Possibly filtering?
+- Possible recommendations for haulers if view livestock - pay for hauler advertisements area based?
+
+
+Value vs effort matrix
+
+Quick wins:
+- Messages colour change to for send and received
+- View listings by location nearest
+- Delete user listing
+- Edit/Delete from favourites
+- Upload user profile photo
+- edit/delete profile
+- Add tiles to listingdetailsscreen
+- Add uuid for messages
+
+Fill-ins:
+- Show if message read or not
+- Ensure logged in user can't view (add later due to testing purposes)
+- Need to fix navigation for swiping out of listingdetailsscreen
+- test location on android
+- Timer for listing posted
+- Accessibility features?
+- Bug check
+
+Major projects:
+- Rework listingeditscreen
+- Make listing user clickable to view their profile and other listings
+- Add multiple images that are swipable for listing or view more
+- Setup Card payment system for ads
+- Add notifications
+- Azure cloud infrastructure backend
+- Advertisements?
+
+Long-term projects:
+- content moderator for azure blob images
+- Possible support/assistance bot else contact info for help
+- Could improve search with algorithm or some sort of machine learning/ai
+- Possible recommendations for haulers if view livestock - pay for hauler advertisements area based?
+- Reviews/feedback system?
+- Possibly filtering?
+
+
+
+
+
+
+
+
+
+
