@@ -9,7 +9,6 @@
 - Need to fix navigation for swiping out of listingdetailsscreen
 - Rework listingeditscreen
 - Setup Card payment system for ads
-- Messages colour change to for send and received
 - Show if message read or not
 - Add uuid for messages
 - Add notifications
@@ -31,7 +30,6 @@
 Value vs effort matrix
 
 Quick wins:
-- Messages colour change to for send and received
 - View listings by location nearest
 - Delete user listing
 - Edit/Delete from favourites
