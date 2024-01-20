@@ -1,30 +1,32 @@
-import React, { useEffect } from "react";
+// ListingsScreen.js
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-
 import ActivityIndicator from "../components/ActivityIndicator";
-import Button from "../components/Button";
 import CardBin from "../components/CardBin";
 import colors from "../config/colors";
 import listingsApi from "../api/listings";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
+import Button from "../components/Button";
 import useApi from "../hooks/useApi";
 import useAuth from "../auth/useAuth";
 
 function ListingsScreen({ navigation }) {
   const { user } = useAuth();
+  const [refreshListings, setRefreshListings] = useState(false);
 
-  // need to fix this
   const getListingsApi = useApi(() =>
     listingsApi.getListings(user.userId, null)
   );
 
-  // const getListingsApi = useApi(listingsApi.getListings());
-
   useEffect(() => {
     getListingsApi.request();
-  }, []);
+  }, [refreshListings]);
+
+  const handleRefreshListings = () => {
+    setRefreshListings((prev) => !prev);
+  };
 
   return (
     <Screen style={styles.screen}>
@@ -41,13 +43,11 @@ function ListingsScreen({ navigation }) {
                 <CardBin
                   title={item.title}
                   subTitle={"£" + item.price}
-                  subTitleStyle={styles.price}
                   imageUrl={item.images[0].url}
                   customHeight={125}
-                  style={styles.card} // Add this line
-                  onPress={() =>
-                    navigation.navigate(routes.LISTING_DETAILS, item)
-                  }
+                  listingId={item.id}
+                  onDelete={handleRefreshListings}
+                  onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
                 />
               </View>
             )}
@@ -72,10 +72,6 @@ function ListingsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-    flexDirection: "row",
-  },
   listingContainer: {
     width: "50%",
     paddingHorizontal: 5,
@@ -94,12 +90,6 @@ const styles = StyleSheet.create({
   },
   retryButton: {
     alignSelf: "center",
-  },
-  price: {
-    color: colors.dark_green,
-  },
-  card: {
-    height: 125,
   },
 });
 
