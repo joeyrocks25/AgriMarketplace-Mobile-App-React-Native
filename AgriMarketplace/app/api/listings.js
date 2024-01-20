@@ -108,9 +108,24 @@ const getListingsBySearch = async (searchText) => {
   }
 };
 
+const deleteListingById = async (listingId) => {
+  try {
+    const fullEndpoint = client.getBaseURL() + endpoint + `/${listingId}`;
+    console.log("API Endpoint for deletion:", fullEndpoint);
+
+    const response = await client.delete(fullEndpoint);
+
+    return response.data; // You can adjust this based on the expected response from your backend
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
 export default {
   addListing,
   getListings,
   getListingById,
   getListingsBySearch,
+  deleteListingById,
 };

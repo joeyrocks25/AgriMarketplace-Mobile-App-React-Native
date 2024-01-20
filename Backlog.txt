@@ -14,7 +14,6 @@
 - Add notifications
 - test location on android
 - Timer for listing posted
-- Delete user listing
 - Edit/Delete from favourites
 - Azure cloud infrastructure backend
 - content moderator for azure blob images
@@ -31,7 +30,6 @@ Value vs effort matrix
 
 Quick wins:
 - View listings by location nearest
-- Delete user listing
 - Edit/Delete from favourites
 - Upload user profile photo
 - edit/delete profile

@@ -1,7 +1,7 @@
 const express = require("express");
 const categories = require("./routes/categories");
 const listings = require("./routes/listings");
-const listing = require("./routes/listing");
+// const listing = require("./routes/listing");
 const users = require("./routes/users");
 const user = require("./routes/user");
 const auth = require("./routes/auth");
@@ -38,8 +38,6 @@ app.use("/api/user", user);
 app.use("/api/expoPushTokens", expoPushTokens);
 
 app.use("/api/categories", categories);
-
-app.use("/api/listing", listing);
 
 app.use("/api/users", users);
 
