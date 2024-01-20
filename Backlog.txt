@@ -24,6 +24,8 @@
 - Reviews/feedback system?
 - Possibly filtering?
 - Possible recommendations for haulers if view livestock - pay for hauler advertisements area based?
+- Add jwt token auth for endpoints
+- tidy endpoints
 
 
 Value vs effort matrix
