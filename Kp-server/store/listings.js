@@ -145,6 +145,8 @@ const addListing = (listing) => {
 
 const getListings = () => listings;
 
+const getListing = (id) => listings.find((listing) => listing.id === id);
+
 const filterListings = (predicate) => listings.filter(predicate);
 
 // New function to perform the search
@@ -165,6 +167,7 @@ const searchListings = (searchText) => {
 module.exports = {
   addListing,
   getListings,
+  getListing,
   filterListings,
   searchListings, // Export the search function
 };

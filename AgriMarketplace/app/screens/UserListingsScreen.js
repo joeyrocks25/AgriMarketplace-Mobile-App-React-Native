@@ -1,4 +1,3 @@
-// ListingsScreen.js
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -12,31 +11,32 @@ import Button from "../components/Button";
 import useApi from "../hooks/useApi";
 import useAuth from "../auth/useAuth";
 
-function ListingsScreen({ navigation }) {
+function UserListingsScreen({ navigation }) {
   const { user } = useAuth();
-  const [refreshListings, setRefreshListings] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const getListingsApi = useApi(() =>
+  const getUserListingsApi = useApi(() =>
     listingsApi.getListings(user.userId, null)
   );
 
   useEffect(() => {
-    getListingsApi.request();
-  }, [refreshListings]);
+    getUserListingsApi.request();
+  }, [refreshKey]);
 
   const handleRefreshListings = () => {
-    setRefreshListings((prev) => !prev);
+    // Increment the key to trigger a refresh
+    setRefreshKey((prevKey) => prevKey + 1);
   };
 
   return (
     <Screen style={styles.screen}>
-      {getListingsApi.loading ? (
+      {getUserListingsApi.loading ? (
         <ActivityIndicator visible={true} />
       ) : (
         <>
           <FlatList
             numColumns={2}
-            data={getListingsApi.data}
+            data={getUserListingsApi.data}
             keyExtractor={(listing) => listing.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.listingContainer}>
@@ -53,14 +53,14 @@ function ListingsScreen({ navigation }) {
             )}
           />
 
-          {getListingsApi.error && (
+          {getUserListingsApi.error && (
             <View style={styles.errorContainer}>
               <AppText style={styles.errorText}>
                 Couldn't retrieve the listings.
               </AppText>
               <Button
                 title="Retry"
-                onPress={getListingsApi.request}
+                onPress={getUserListingsApi.request}
                 style={styles.retryButton}
               />
             </View>
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListingsScreen;
+export default UserListingsScreen;
