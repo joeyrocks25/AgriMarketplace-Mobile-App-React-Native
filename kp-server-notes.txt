@@ -8,6 +8,13 @@ curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"Example Listi
 
 We also can identify the connection is good because we're loading our listitem data
 
+C:\Users\kpfb2>curl -X DELETE http://192.168.1.130:9000/api/listings/12
+{"error":"Listing not found."}
+C:\Users\kpfb2>curl http://192.168.1.130:9000/api/listings/12
+{"error":"Listing not found."}
+C:\Users\kpfb2>curl -X GET http://192.168.1.130:9000/api/listings
+
+
 So why are we getting this error?
 SyntaxError: Unexpected token n in JSON at position 0
     at JSON.parse (<anonymous>)

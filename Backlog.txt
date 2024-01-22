@@ -14,7 +14,6 @@
 - Add notifications
 - test location on android
 - Timer for listing posted
-- Delete user listing
 - Edit/Delete from favourites
 - Azure cloud infrastructure backend
 - content moderator for azure blob images
@@ -25,13 +24,15 @@
 - Reviews/feedback system?
 - Possibly filtering?
 - Possible recommendations for haulers if view livestock - pay for hauler advertisements area based?
-
+- Add jwt token auth for endpoints
+- tidy endpoints
+- User listings & favourites navigation fix
+- User listings & favourites card rework
 
 Value vs effort matrix
 
 Quick wins:
 - View listings by location nearest
-- Delete user listing
 - Edit/Delete from favourites
 - Upload user profile photo
 - edit/delete profile
@@ -39,6 +40,8 @@ Quick wins:
 - Add uuid for messages
 
 Fill-ins:
+- User listings & favourites navigation fix
+- User listings & favourites card rework
 - Show if message read or not
 - Ensure logged in user can't view (add later due to testing purposes)
 - Need to fix navigation for swiping out of listingdetailsscreen

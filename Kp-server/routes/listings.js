@@ -151,6 +151,7 @@ router.get("/", (req, res) => {
 // New route handler for searching listings
 router.get("/search", (req, res) => {
   const { searchText } = req.query;
+  console.log("Received search request with searchText:", searchText);
 
   // Perform the search in the store based on the searchText
   const searchResults = store.searchListings(searchText);
@@ -161,6 +162,54 @@ router.get("/search", (req, res) => {
   });
 
   res.send(resources);
+});
+
+// New route handler for getting a listing by ID
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+
+  // Validate that the ID is a positive integer
+  const listingId = parseInt(id);
+  if (isNaN(listingId) || listingId <= 0) {
+    return res.status(400).send({ error: "Invalid listing IDddddd." });
+  }
+
+  // Find the listing in the store by ID
+  const listing = store.getListings().find((item) => item.id === listingId);
+
+  // If the listing is not found, return a 404 error
+  if (!listing) {
+    return res.status(404).send({ error: "Listing not found." });
+  }
+
+  // Map the listing and send it as a response
+  const resource = listingMapper(listing);
+  res.send(resource);
+});
+
+// New route handler for deleting a listing by ID
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+
+  // Validate that the ID is a positive integer
+  const listingId = parseInt(id);
+  if (isNaN(listingId) || listingId <= 0) {
+    return res.status(400).send({ error: "Invalid listing ID." });
+  }
+
+  // Find the index of the listing in the store by ID
+  const index = store.getListings().findIndex((item) => item.id === listingId);
+
+  // If the listing is not found, return a 404 error
+  if (index === -1) {
+    return res.status(404).send({ error: "Listing not found." });
+  }
+
+  // Remove the listing from the store
+  store.getListings().splice(index, 1);
+
+  // Send a success response
+  res.status(204).send();
 });
 
 module.exports = router;
