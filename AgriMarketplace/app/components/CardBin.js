@@ -1,18 +1,19 @@
-import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
+import React from "react";
+import { View, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import Text from "./Text";
 import colors from "../config/colors";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import listingsApi from "../api/listings";
 
-function Card({ title, subTitle, imageUrl, onPress, customHeight, distance }) {
-  const handleDeletePress = () => {
-    console.log("test");
-    // Perform the logic to handle the delete press here
+const Card = ({ title, subTitle, imageUrl, onPress, customHeight, distance, listingId, onDelete }) => {
+  const handleDeletePress = async () => {
+    try {
+      await listingsApi.deleteListingById(listingId);
+      console.log("Listing deleted successfully!");
+      onDelete();
+    } catch (error) {
+      console.error("Error deleting listing:", error);
+    }
   };
 
   return (

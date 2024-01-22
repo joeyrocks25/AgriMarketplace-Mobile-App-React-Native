@@ -148,6 +148,22 @@ router.get("/", (req, res) => {
   res.send(resources);
 });
 
+// New route handler for searching listings
+router.get("/search", (req, res) => {
+  const { searchText } = req.query;
+  console.log("Received search request with searchText:", searchText);
+
+  // Perform the search in the store based on the searchText
+  const searchResults = store.searchListings(searchText);
+
+  const resources = searchResults.map((listing) => {
+    const resource = listingMapper(listing);
+    return resource;
+  });
+
+  res.send(resources);
+});
+
 // New route handler for getting a listing by ID
 router.get("/:id", (req, res) => {
   const { id } = req.params;
@@ -155,7 +171,7 @@ router.get("/:id", (req, res) => {
   // Validate that the ID is a positive integer
   const listingId = parseInt(id);
   if (isNaN(listingId) || listingId <= 0) {
-    return res.status(400).send({ error: "Invalid listing ID." });
+    return res.status(400).send({ error: "Invalid listing IDddddd." });
   }
 
   // Find the listing in the store by ID
@@ -194,21 +210,6 @@ router.delete("/:id", (req, res) => {
 
   // Send a success response
   res.status(204).send();
-});
-
-// New route handler for searching listings
-router.get("/search", (req, res) => {
-  const { searchText } = req.query;
-
-  // Perform the search in the store based on the searchText
-  const searchResults = store.searchListings(searchText);
-
-  const resources = searchResults.map((listing) => {
-    const resource = listingMapper(listing);
-    return resource;
-  });
-
-  res.send(resources);
 });
 
 module.exports = router;
