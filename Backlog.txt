@@ -14,7 +14,6 @@
 - Add notifications
 - test location on android
 - Timer for listing posted
-- Edit/Delete from favourites
 - Azure cloud infrastructure backend
 - content moderator for azure blob images
 - Possible support/assistance bot else contact info for help
@@ -27,21 +26,20 @@
 - Add jwt token auth for endpoints
 - tidy endpoints
 - User listings & favourites navigation fix
-- User listings & favourites card rework
+- User listings & favourites card rework + delete favourite
 
 Value vs effort matrix
 
 Quick wins:
-- View listings by location nearest
-- Edit/Delete from favourites
 - Upload user profile photo
 - edit/delete profile
 - Add tiles to listingdetailsscreen
 - Add uuid for messages
 
 Fill-ins:
+- View listings by location nearest
 - User listings & favourites navigation fix
-- User listings & favourites card rework
+- User listings & favourites card rework + delete favourite
 - Show if message read or not
 - Ensure logged in user can't view (add later due to testing purposes)
 - Need to fix navigation for swiping out of listingdetailsscreen

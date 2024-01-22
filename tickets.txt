@@ -17,3 +17,4 @@
 7. Backlog + Value/effort matrix
 8. Messages colour change send/received
 9. Delete a listing + update sdk 49.0.0
+10. Add profile photo
