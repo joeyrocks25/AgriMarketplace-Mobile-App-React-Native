@@ -16,3 +16,4 @@
   - fixed title and distance on listingsdetailsscreen so if title is too big doesn't push it off screen, moved above favourite, distance etc
 7. Backlog + Value/effort matrix
 8. Messages colour change send/received
+9. Delete a listing + update sdk 49.0.0

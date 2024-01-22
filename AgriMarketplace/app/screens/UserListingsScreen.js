@@ -1,66 +1,66 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-
 import ActivityIndicator from "../components/ActivityIndicator";
-import Button from "../components/Button";
 import CardBin from "../components/CardBin";
 import colors from "../config/colors";
 import listingsApi from "../api/listings";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
+import Button from "../components/Button";
 import useApi from "../hooks/useApi";
 import useAuth from "../auth/useAuth";
 
-function ListingsScreen({ navigation }) {
+function UserListingsScreen({ navigation }) {
   const { user } = useAuth();
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  // need to fix this
-  const getListingsApi = useApi(() =>
+  const getUserListingsApi = useApi(() =>
     listingsApi.getListings(user.userId, null)
   );
 
-  // const getListingsApi = useApi(listingsApi.getListings());
-
   useEffect(() => {
-    getListingsApi.request();
-  }, []);
+    getUserListingsApi.request();
+  }, [refreshKey]);
+
+  const handleRefreshListings = () => {
+    // Increment the key to trigger a refresh
+    setRefreshKey((prevKey) => prevKey + 1);
+  };
 
   return (
     <Screen style={styles.screen}>
-      {getListingsApi.loading ? (
+      {getUserListingsApi.loading ? (
         <ActivityIndicator visible={true} />
       ) : (
         <>
           <FlatList
             numColumns={2}
-            data={getListingsApi.data}
+            data={getUserListingsApi.data}
             keyExtractor={(listing) => listing.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.listingContainer}>
                 <CardBin
                   title={item.title}
                   subTitle={"£" + item.price}
-                  subTitleStyle={styles.price}
                   imageUrl={item.images[0].url}
                   customHeight={125}
-                  style={styles.card} // Add this line
-                  onPress={() =>
-                    navigation.navigate(routes.LISTING_DETAILS, item)
-                  }
+                  listingId={item.id}
+                  onDelete={handleRefreshListings}
+                  onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
                 />
               </View>
             )}
           />
 
-          {getListingsApi.error && (
+          {getUserListingsApi.error && (
             <View style={styles.errorContainer}>
               <AppText style={styles.errorText}>
                 Couldn't retrieve the listings.
               </AppText>
               <Button
                 title="Retry"
-                onPress={getListingsApi.request}
+                onPress={getUserListingsApi.request}
                 style={styles.retryButton}
               />
             </View>
@@ -72,10 +72,6 @@ function ListingsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-    flexDirection: "row",
-  },
   listingContainer: {
     width: "50%",
     paddingHorizontal: 5,
@@ -95,12 +91,6 @@ const styles = StyleSheet.create({
   retryButton: {
     alignSelf: "center",
   },
-  price: {
-    color: colors.dark_green,
-  },
-  card: {
-    height: 125,
-  },
 });
 
-export default ListingsScreen;
+export default UserListingsScreen;

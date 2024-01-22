@@ -21,9 +21,9 @@
     "@react-navigation/stack": "^6.0.0",
     "apisauce": "^3.0.1",
     "axios": "^1.4.0",
-    "expo": "~48.0.18",
+    "expo": "^49.0.0",
     "expo-app-loading": "^2.1.1",
-    "expo-blur": "~12.2.2",
+    "expo-blur": "~12.4.1",
     "expo-camera": "~13.2.1",
     "expo-constants": "~14.2.1",
     "expo-device": "~5.2.1",
@@ -53,14 +53,15 @@
     "react-native-screens": "~3.20.0",
     "react-native-shadow": "^1.2.2",
     "react-native-shadow-2": "^7.0.8",
-    "react-native-svg": "13.4.0",
+    "react-native-svg": "^14.1.0",
     "react-native-web": "~0.18.10",
     "uuid-random": "^1.3.2",
     "yup": "^0.28.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@expo/cli": "^0.7.3"
+    "@expo/cli": "^0.7.3",
+    "expo-cli": "^6.3.10"
   },
   "private": true
 }
