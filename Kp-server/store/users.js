@@ -5,6 +5,7 @@ const users = [
     name: "john",
     email: "john@domain.com",
     password: "12345",
+    profileImage: null, // Add the profileImage property
   },
   {
     id: 2,
@@ -12,6 +13,7 @@ const users = [
     name: "KP Cunningham",
     email: "kp@gmail.com",
     password: "12345",
+    profileImage: null, // Add the profileImage property
   },
   {
     id: 3,
@@ -19,6 +21,7 @@ const users = [
     name: "KP Cunninghammm",
     email: "1",
     password: "1",
+    profileImage: null, // Add the profileImage property
   },
 ];
 
@@ -35,7 +38,6 @@ function getUserByEmail(email) {
 }
 
 function addUser(user) {
-  user.id = users.length + 1;
   users.push(user);
 }
 
