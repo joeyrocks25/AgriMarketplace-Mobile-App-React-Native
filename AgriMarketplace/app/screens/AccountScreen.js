@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, View, FlatList } from "react-native";
-
+import { StyleSheet, View, FlatList, Image, Text } from "react-native";
 import { ListItem, ListItemSeparator } from "../components/lists";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
@@ -25,14 +24,6 @@ const menuItems = [
     },
     targetScreen: routes.USER_LISTINGS,
   },
-  // {
-  //   title: "My Messages",
-  //   icon: {
-  //     name: "email",
-  //     backgroundColor: colors.medium,
-  //   },
-  //   targetScreen: routes.MESSAGES,
-  // },
   {
     title: "Saved Listings",
     icon: {
@@ -43,16 +34,32 @@ const menuItems = [
   },
 ];
 
+function CustomAvatar({ imageUri, name, email }) {
+  return (
+    <View style={styles.container2}>
+      <View style={styles.avatarContainer}>
+        <Image source={{ uri: imageUri }} style={styles.avatar} />
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.email}>{email}</Text>
+      </View>
+    </View>
+  );
+}
+
 function AccountScreen({ navigation }) {
   const { user, logOut } = useAuth();
 
+  console.log("user = ",user)
+
   return (
     <Screen style={styles.screen}>
-      <View style={styles.container}>
-        <ListItem
-          title={user.name}
-          subTitle={user.email}
-          image={require("../assets/profile_photo.png")}
+      <View style={styles.container1}>
+        <CustomAvatar
+          imageUri={user.profileImage}
+          name={user.name}
+          email={user.email}
         />
       </View>
       <View style={styles.container}>
@@ -90,7 +97,47 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
   },
   container: {
-    marginVertical: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 30,
+    backgroundColor: colors.light,
+  },
+  container1: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.middle_orange,
+    padding: 3,
+    borderColor: colors.black,
+    borderWidth: 1,
+  },
+  container2: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.middle_orange,
+  },
+  avatarContainer: {
+    borderColor: colors.black,
+    borderWidth: 1,
+    borderRadius: 50,
+    overflow: "hidden",
+    width: 80,
+    height: 80,
+  },
+  avatar: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 50,
+  },
+  textContainer: {
+    marginLeft: 10,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  email: {
+    fontSize: 16,
+    color: colors.medium,
   },
 });
 

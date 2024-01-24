@@ -28,6 +28,7 @@ router.post("/", (req, res) => {
       name: user.name,
       password: user.password,
       email,
+      profileImage: user.profileImage,
     },
     "jwtPrivateKey" // Replace with your actual private key
   );
