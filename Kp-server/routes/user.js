@@ -6,7 +6,7 @@ const listingsStore = require("../store/listings");
 const auth = require("../middleware/auth");
 
 router.get("/:id", auth, (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = req.params.id;
   const user = usersStore.getUserById(userId);
 
   if (!user) {
@@ -17,14 +17,17 @@ router.get("/:id", auth, (req, res) => {
     (listing) => listing.userId === userId
   );
 
-  // Include the profile image in the response if available
+  // Include the profile image in the response, use default if null
+  const defaultProfileImage = "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg";
+  const profileImage = user.profileImage || defaultProfileImage;
+
   const response = {
     id: user.id,
     username: user.username,
     name: user.name,
     email: user.email,
     listings: listings.length,
-    profileImage: user.profileImage, // Assuming user has a profileImage property
+    profileImage,
   };
 
   res.send(response);

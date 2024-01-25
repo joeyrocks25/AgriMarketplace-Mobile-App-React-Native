@@ -19,4 +19,4 @@
 9. Delete a listing + update sdk 49.0.0
 10. Add profile photo for user
     - Configure frontend & backend to accept profile photo for user
-    - Display profile photo in user profile
+    - Display profile photo in account, user profile and for posted listings

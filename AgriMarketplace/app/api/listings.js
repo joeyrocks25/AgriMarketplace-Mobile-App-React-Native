@@ -55,13 +55,13 @@ export const addListing = async (listing, onUploadProgress) => {
 
 const getListings = async (userId, categoryId) => {
   try {
-    const parsedUserId = userId ? parseInt(userId, 10) : null;
+    
     const parsedCategoryId = categoryId ? parseInt(categoryId, 10) : null;
 
     let queryString = "";
 
-    if (parsedUserId) {
-      queryString += `userId=${parsedUserId}`;
+    if (userId) {
+      queryString += `userId=${userId}`;
     }
 
     if (parsedCategoryId) {

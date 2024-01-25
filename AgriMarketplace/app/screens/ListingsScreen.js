@@ -131,7 +131,7 @@ function ListingsScreen({ navigation }) {
                   imageUrl={item.images[0].url}
                   customHeight={200}
                   onPress={() =>
-                    navigation.navigate(routes.LISTING_DETAILS, { item, origin: 'listings' })
+                    navigation.navigate(routes.LISTING_DETAILS, { item })
                   }
                   distance={distance}
                   isFavorite={favorites.some((fav) => fav.id === item.id)}

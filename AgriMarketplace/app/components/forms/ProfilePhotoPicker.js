@@ -1,15 +1,21 @@
-import React from "react";
-import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { useFormikContext } from "formik";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import colors from "../../config/colors";
 import ErrorMessage from "./ErrorMessage";
 
-function ProfilePhotoPicker({ name }) {
+function ProfilePhotoPicker({ name, initialImage }) {
   const { errors, setFieldValue, touched, values } = useFormikContext();
   const imageUri = values[name];
+
+  useEffect(() => {
+    if (initialImage) {
+      setFieldValue(name, initialImage);
+    }
+  }, [initialImage, name, setFieldValue]);
 
   const handlePickImage = async () => {
     try {
@@ -57,7 +63,7 @@ function ProfilePhotoPicker({ name }) {
           </TouchableOpacity>
         )}
       </View>
-      <ErrorMessage error={errors[name]} visible={touched[name]} />
+      <ErrorMessage error={errors && errors[name]} visible={touched && touched[name]} />
     </>
   );
 }
@@ -78,8 +84,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     overflow: "hidden",
     position: "relative",
-    borderWidth: 4, // Add border width
-    borderColor: colors.primary, // Add border color
+    borderWidth: 4,
+    borderColor: colors.primary,
   },
   image: {
     width: "100%",
