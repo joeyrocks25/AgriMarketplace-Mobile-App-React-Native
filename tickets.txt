@@ -20,3 +20,7 @@
 10. Add profile photo for user
     - Configure frontend & backend to accept profile photo for user
     - Display profile photo in account, user profile and for posted listings
+11. Add additional security for messages
+    - Added triple level uuid for conversation security
+    - Fixed bug for messages
+    - Fixed bug for default profile photo

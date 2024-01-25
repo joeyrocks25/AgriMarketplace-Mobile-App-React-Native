@@ -30,9 +30,7 @@
 Value vs effort matrix
 
 Quick wins:
-- edit/delete profile
 - Add tiles to listingdetailsscreen
-- Add uuid for messages
 
 Fill-ins:
 - View listings by location nearest
@@ -47,6 +45,7 @@ Fill-ins:
 - Bug check
 
 Major projects:
+- edit/delete profile (may require backend rework first)
 - Rework listingeditscreen
 - Make listing user clickable to view their profile and other listings
 - Add multiple images that are swipable for listing or view more
