@@ -20,6 +20,11 @@ router.post("/", (req, res) => {
     return res.status(400).send({ error: "Invalid email or password." });
   }
 
+  const defaultProfileImage = "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg";
+
+  // Use the default profile image if user doesn't have one
+  const profileImage = user.profileImage || defaultProfileImage;
+
   // Generate a JWT token
   const token = jwt.sign(
     {
@@ -28,6 +33,7 @@ router.post("/", (req, res) => {
       name: user.name,
       password: user.password,
       email,
+      profileImage,
     },
     "jwtPrivateKey" // Replace with your actual private key
   );

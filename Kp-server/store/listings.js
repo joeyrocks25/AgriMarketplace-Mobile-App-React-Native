@@ -7,7 +7,7 @@ const listings = [
     images: [{ fileName: "cow1" }],
     price: 1000,
     categoryId: 1,
-    userId: 1,
+    userId: "34ffda8f-7492-4a52-a80c-76f5a8a431e00",
     location: {
       latitude: 54.24860308279903,
       longitude: -6.70498370564887,
@@ -20,7 +20,7 @@ const listings = [
     images: [{ fileName: "tractor2" }],
     categoryId: 3,
     price: 35000,
-    userId: 1,
+    userId: "34ffda8f-7492-4a52-a80c-76f5a8a431e00",
     location: {
       latitude: 54.460429662818754,
       longitude: -5.830717435121883,
@@ -34,7 +34,7 @@ const listings = [
     images: [{ fileName: "cultivator3" }],
     price: 1000,
     categoryId: 2,
-    userId: 2,
+    userId: "2",
     location: {
       latitude: 54.460429662818754,
       longitude: -5.830717435121883,
@@ -46,7 +46,7 @@ const listings = [
     images: [{ fileName: "golf4" }],
     categoryId: 4,
     price: 100,
-    userId: 2,
+    userId: "2",
     location: {
       latitude: 54.24860308279903,
       longitude: -6.70498370564887,
@@ -58,7 +58,7 @@ const listings = [
     images: [{ fileName: "bull1" }],
     categoryId: 1,
     price: 2000,
-    userId: 1,
+    userId: "34ffda8f-7492-4a52-a80c-76f5a8a431e00",
     location: {
       latitude: 54.56259541218416,
       longitude: -5.953039566302392,
@@ -70,7 +70,7 @@ const listings = [
     images: [{ fileName: "sheep1" }],
     categoryId: 1,
     price: 100,
-    userId: 2,
+    userId: "2",
     location: {
       latitude: 54.24860308279903,
       longitude: -6.70498370564887,
@@ -82,7 +82,7 @@ const listings = [
     images: [{ fileName: "calves1" }],
     categoryId: 1,
     price: 800,
-    userId: 1,
+    userId: "34ffda8f-7492-4a52-a80c-76f5a8a431e00",
     location: {
       latitude: 54.24860308279903,
       longitude: -6.70498370564887,
@@ -94,7 +94,7 @@ const listings = [
     images: [{ fileName: "trailed_sprayer1" }],
     categoryId: 2,
     price: 500,
-    userId: 2,
+    userId: "2",
     location: {
       latitude: 54.24860308279903,
       longitude: -6.70498370564887,
@@ -106,7 +106,7 @@ const listings = [
     images: [{ fileName: "jumbo_ripper1" }],
     categoryId: 2,
     price: 700,
-    userId: 2,
+    userId: "2",
     location: {
       latitude: 54.24860308279903,
       longitude: -6.70498370564887,
@@ -118,7 +118,7 @@ const listings = [
     images: [{ fileName: "tractor3" }],
     categoryId: 3,
     price: 50000,
-    userId: 2,
+    userId: "2",
     location: {
       latitude: 54.24860308279903,
       longitude: -6.70498370564887,
@@ -130,7 +130,7 @@ const listings = [
     images: [{ fileName: "tractor4" }],
     categoryId: 3,
     price: 75000,
-    userId: 2,
+    userId: "2",
     location: {
       latitude: 54.24860308279903,
       longitude: -6.70498370564887,
@@ -164,10 +164,16 @@ const searchListings = (searchText) => {
   return filteredListings;
 };
 
+const countListingsByUserId = (userId) => {
+  return listings.filter((listing) => listing.userId === userId).length;
+};
+
+
 module.exports = {
   addListing,
   getListings,
   getListing,
   filterListings,
   searchListings, // Export the search function
+  countListingsByUserId,
 };
