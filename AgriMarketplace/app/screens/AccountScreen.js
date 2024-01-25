@@ -35,6 +35,7 @@ const menuItems = [
 ];
 
 function CustomAvatar({ imageUri, name, email }) {
+  console.log("image uri", imageUri)
   return (
     <View style={styles.container2}>
       <View style={styles.avatarContainer}>
@@ -103,21 +104,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
   },
   container1: {
+    marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.middle_orange,
-    padding: 3,
-    borderColor: colors.black,
-    borderWidth: 1,
+    backgroundColor: colors.white,
+    padding: 4,
+    // borderRadius: 18,
+    // borderColor: colors.black,
+    // borderWidth: 1,
   },
   container2: {
+    marginLeft: 5,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.middle_orange,
+    backgroundColor: colors.white,
   },
   avatarContainer: {
-    borderColor: colors.black,
-    borderWidth: 1,
+    borderColor: colors.middle_orange,
+    borderWidth: 2,
     borderRadius: 50,
     overflow: "hidden",
     width: 80,

@@ -4,8 +4,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableWithoutFeedback,
+  Image as RNImage
 } from "react-native";
-import { Image } from "react-native-expo-image-cache";
+import { Image as ExpoImage } from "react-native-expo-image-cache";
 import { FontAwesome } from "@expo/vector-icons";
 import colors from "../config/colors";
 import ContactSellerForm from "../components/ContactSellerForm";
@@ -19,11 +20,33 @@ import usersApi from "../api/users";
 import favouritesApi from "../api/favourites";
 import useAuth from "../auth/useAuth";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
+import Screen from "../components/Screen";
+
+// Custom Avatar Component
+function CustomAvatar({ imageUri, username, userListingsCount }) {
+  const listingsText = userListingsCount === 1 ? "Listing" : "Listings";
+
+  return (
+    <View style={styles.container2}>
+      <View style={styles.avatarContainer}>
+        <RNImage source={{ uri: imageUri }} style={styles.avatar} />
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.username}>{username}</Text>
+        <Text style={styles.userListingsCount}>
+          {userListingsCount} {listingsText}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 
 function ListingDetailsScreen({ route, onScreenFocus }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const { item, origin } = route.params;
+  // console.log("item is..", item)
 
   const location = useLocation();
   const { user } = useAuth();
@@ -97,10 +120,12 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
   };
 
   const userId = item.userId;
+  console.log("uzrrrr id", userId)
 
   const [userListingsCount, setUserListingsCount] = useState(0);
   const [userDetails, setUserDetails] = useState(null);
   const [listingDescription, setListingDescription] = useState("");
+  
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -122,6 +147,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
         );
 
         setUserListingsCount(count || 0);
+        // console.log("responseeee", response)
       } catch (error) {
         console.log("Error fetching listings:", error);
       }
@@ -130,7 +156,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
     const fetchUser = async () => {
       try {
         const response = await usersApi.getUser(userId);
-        setUserDetails(response.data);
+        setUserDetails(response);
         console.log("Fetched User:", response.data);
       } catch (error) {
         console.log("Error fetching user:", error);
@@ -141,14 +167,15 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
     fetchUser();
   }, [userId, isFocused]);
 
-  const listingsText = userListingsCount === 1 ? "Listing" : "Listings";
+  
 
   const [formVisible, setFormVisible] = useState(false);
 
   return (
-    <View style={styles.container}>
+    // <Screen style={styles.screen}>
+      <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <Image
+        <ExpoImage
           style={styles.image}
           preview={{ uri: item.images[0].thumbnailUrl }}
           tint="light"
@@ -184,13 +211,20 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
           )}
           <View style={{ marginTop: 20 }}>
             {userDetails && (
-              <ListItem
-                image={require("../assets/profile_photo.png")}
-                title={userDetails.username}
-                subTitle={`${userListingsCount} ${listingsText}`}
-              />
+              <React.Fragment>
+                {/* Log userDetails and related properties */}
+                {console.log("UserDetails:", userDetails.data)}
+                {console.log("Profile Image URL:", userDetails.data.profileImage)}
+
+                <CustomAvatar
+                  imageUri={userDetails.data.profileImage} // Assuming you have a profile image URL in userDetails.data
+                  username={userDetails.data.username}
+                  userListingsCount={userListingsCount}
+                />
+              </React.Fragment>
             )}
           </View>
+
           <RNGHTouchableWithoutFeedback
             onPress={() => setFormVisible(true)}
           >
@@ -204,6 +238,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
         onClose={() => setFormVisible(false)}
       />
     </View>
+    // </Screen>
   );
 }
 
@@ -211,6 +246,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.test,
+  },
+  container2: {
+    marginLeft: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.white,
+  },
+  avatarContainer: {
+    borderColor: colors.middle_orange,
+    borderWidth: 2,
+    borderRadius: 50,
+    overflow: "hidden",
+    width: 80,
+    height: 80,
+  },
+  avatar: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 50,
+  },
+  textContainer: {
+    marginLeft: 10,
   },
   scrollView: {
     flex: 1,

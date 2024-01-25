@@ -123,11 +123,14 @@ router.get("/", (req, res) => {
   let filteredListings = listings;
   let userListingsCount = 0;
 
+  console.log("userid", userId)
   if (userId) {
     // Filter the listings based on the userId
     filteredListings = filteredListings.filter(
       (listing) => listing.userId == userId
     );
+    console.log("userid", userId)
+    userListingsCount = store.countListingsByUserId(userId);
   }
 
   if (categoryId) {
@@ -137,11 +140,13 @@ router.get("/", (req, res) => {
     );
   }
 
-  userListingsCount = filteredListings.length; // Count the number of filtered listings
+  // userListingsCount = filteredListings.length; // Count the number of filtered listings
 
   const resources = filteredListings.map((listing) => {
     const resource = listingMapper(listing);
+    console.log("user listing count", userListingsCount)
     resource.userListingsCount = userListingsCount;
+    console.log("resource:", resource)
     return resource;
   });
 
@@ -164,28 +169,28 @@ router.get("/search", (req, res) => {
   res.send(resources);
 });
 
-// New route handler for getting a listing by ID
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
+// // New route handler for getting a listing by ID
+// router.get("/:id", (req, res) => {
+//   const { id } = req.params;
 
-  // Validate that the ID is a positive integer
-  const listingId = parseInt(id);
-  if (isNaN(listingId) || listingId <= 0) {
-    return res.status(400).send({ error: "Invalid listing IDddddd." });
-  }
+//   // Validate that the ID is a positive integer
+//   const listingId = parseInt(id);
+//   if (isNaN(listingId) || listingId <= 0) {
+//     return res.status(400).send({ error: "Invalid listing IDddddd." });
+//   }
 
-  // Find the listing in the store by ID
-  const listing = store.getListings().find((item) => item.id === listingId);
+//   // Find the listing in the store by ID
+//   const listing = store.getListings().find((item) => item.id === listingId);
 
-  // If the listing is not found, return a 404 error
-  if (!listing) {
-    return res.status(404).send({ error: "Listing not found." });
-  }
+//   // If the listing is not found, return a 404 error
+//   if (!listing) {
+//     return res.status(404).send({ error: "Listing not found." });
+//   }
 
-  // Map the listing and send it as a response
-  const resource = listingMapper(listing);
-  res.send(resource);
-});
+//   // Map the listing and send it as a response
+//   const resource = listingMapper(listing);
+//   res.send(resource);
+// });
 
 // New route handler for deleting a listing by ID
 router.delete("/:id", (req, res) => {

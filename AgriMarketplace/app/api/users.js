@@ -56,8 +56,8 @@ export const registerWithProfilePhoto = async (userInfo, onUploadProgress) => {
 
 // Function to get user information by ID
 export const getUser = (id) => {
-  const parsedId = parseInt(id, 10);
-  const fullEndpoint = client.getBaseURL() + "/users" + `?id=${parsedId}`;
+  // const parsedId = parseInt(id, 10);
+  const fullEndpoint = client.getBaseURL() + "/users" + `?id=${id}`;
   console.log("API Endpoint:", fullEndpoint);
 
   const request = client.get(fullEndpoint);

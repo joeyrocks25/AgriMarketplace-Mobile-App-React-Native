@@ -113,7 +113,7 @@ router.post("/", async (req, res) => {
 router.get("/", (req, res) => {
   const { id } = req.query;
   if (id) {
-    const user = usersStore.getUserById(Number(id));
+    const user = usersStore.getUserById(id);
     if (user) {
       res.send(user);
     } else {

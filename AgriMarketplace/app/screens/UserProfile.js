@@ -1,16 +1,14 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, TextInput, TouchableOpacity, Text } from "react-native";
 import useAuth from "../auth/useAuth";
+import { Formik } from "formik";
+import ProfilePhotoPicker from "../components/forms/ProfilePhotoPicker";
+import colors from "../config/colors";
 
 function UserProfile() {
   const { user } = useAuth();
   console.log(user);
+
   const [editing, setEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...user });
 
@@ -38,55 +36,72 @@ function UserProfile() {
     }));
   };
 
+  const handleProfileImageChange = (profileImage) => {
+    // Log the profile image when it changes
+    console.log("Profile Image Changed:", profileImage);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>User Profile</Text>
-      {editing ? (
-        <>
-          <EditableField
-            label="Username"
-            value={user.username}
-            onChange={(value) => handleChange("username", value)}
+    <Formik initialValues={{}} onSubmit={() => {}}>
+      {({ errors, touched }) => (
+        <View style={styles.container}>
+          <View style={styles.container2}>
+          <ProfilePhotoPicker
+            name="profileImage" // Assuming the field name is 'profileImage'
+            initialImage={user.profileImage}
+            onChange={handleProfileImageChange}
+            errors={errors} // Pass errors to ProfilePhotoPicker
+            touched={touched} // Pass touched to ProfilePhotoPicker
           />
-          <EditableField
-            label="Name"
-            value={editedUser.name}
-            onChange={(value) => handleChange("name", value)}
-          />
-          <EditableField
-            label="Email"
-            value={editedUser.email}
-            onChange={(value) => handleChange("email", value)}
-          />
-          <EditableField
-            label="Password"
-            value={editedUser.password}
-            onChange={(value) => handleChange("password", value)}
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleCancel}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          <ReadOnlyField label="Username" value={user.username} />
-          <ReadOnlyField label="Name" value={user.name} />
-          <ReadOnlyField label="Email" value={user.email} />
-          <ReadOnlyField
-            label="Password"
-            value={user.password}
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.button} onPress={handleEdit}>
-            <Text style={styles.buttonText}>Edit</Text>
-          </TouchableOpacity>
-        </>
+          </View>
+          {editing ? (
+            <>
+              <EditableField
+                label="Username"
+                value={editedUser.username}
+                onChange={(value) => handleChange("username", value)}
+              />
+              <EditableField
+                label="Name"
+                value={editedUser.name}
+                onChange={(value) => handleChange("name", value)}
+              />
+              <EditableField
+                label="Email"
+                value={editedUser.email}
+                onChange={(value) => handleChange("email", value)}
+              />
+              <EditableField
+                label="Password"
+                value={editedUser.password}
+                onChange={(value) => handleChange("password", value)}
+                secureTextEntry
+              />
+              <TouchableOpacity style={styles.button} onPress={handleSave}>
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={handleCancel}>
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <ReadOnlyField label="Username" value={user.username} />
+              <ReadOnlyField label="Name" value={user.name} />
+              <ReadOnlyField label="Email" value={user.email} />
+              <ReadOnlyField
+                label="Password"
+                value={user.password}
+                secureTextEntry
+              />
+              <TouchableOpacity style={styles.button} onPress={handleEdit}>
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
       )}
-    </View>
+    </Formik>
   );
 }
 
@@ -107,11 +122,7 @@ function EditableField({ label, value, onChange, secureTextEntry = false }) {
 }
 
 function ReadOnlyField({ label, value, secureTextEntry = false }) {
-  const maskedValue = value
-    ? secureTextEntry
-      ? "*".repeat(value.length)
-      : value
-    : "";
+  const maskedValue = value ? (secureTextEntry ? "*".repeat(value.length) : value) : "";
 
   return (
     <View style={styles.fieldContainer}>
@@ -131,7 +142,13 @@ function ReadOnlyField({ label, value, secureTextEntry = false }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 50,
+  },
+  container2: {
+    justifyContent: "center", // Vertical alignment
+    alignItems: "center",     // Horizontal alignment
+    marginTop: -30,
+    marginBottom: 20,
   },
   heading: {
     fontSize: 24,
@@ -139,7 +156,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   fieldContainer: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   label: {
     fontSize: 16,
@@ -154,10 +171,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: "blue",
+    backgroundColor: colors.middle_orange,
     borderRadius: 5,
     padding: 10,
-    marginTop: 10,
+    marginTop: 20,
   },
   buttonText: {
     color: "white",
