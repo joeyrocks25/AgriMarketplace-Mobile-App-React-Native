@@ -115,12 +115,26 @@ router.get("/", (req, res) => {
   if (id) {
     const user = usersStore.getUserById(id);
     if (user) {
-      res.send(user);
+      // Use the default profile image if user doesn't have one
+      const defaultProfileImage = "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg";
+      const profileImage = user.profileImage || defaultProfileImage;
+
+      // Add the profileImage property to the user object
+      const userWithProfileImage = { ...user, profileImage };
+
+      res.send(userWithProfileImage);
     } else {
       res.status(404).send({ error: "User not found." });
     }
   } else {
-    res.send(usersStore.getUsers());
+    // Use the default profile image for each user who doesn't have one
+    const defaultProfileImage = "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg";
+    const usersWithProfileImages = usersStore.getUsers().map(user => ({
+      ...user,
+      profileImage: user.profileImage || defaultProfileImage,
+    }));
+
+    res.send(usersWithProfileImages);
   }
 });
 
