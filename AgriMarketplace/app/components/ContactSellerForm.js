@@ -7,10 +7,12 @@ import messagesApi from "../api/messages";
 import colors from "../config/colors";
 
 function ContactSellerForm({ listing }) {
+  console.log("listinggg", listing)
   const handleSend = async ({ message }, { resetForm }) => {
     Keyboard.dismiss();
 
     console.log("message is", message);
+    console.log("listing id is", listing.id)
     const result = await messagesApi.send(message, listing.id);
     console.log("result is", result);
 

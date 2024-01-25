@@ -22,6 +22,7 @@ import useAuth from "../auth/useAuth";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Screen from "../components/Screen";
 
+
 // Custom Avatar Component
 function CustomAvatar({ imageUri, username, userListingsCount }) {
   const listingsText = userListingsCount === 1 ? "Listing" : "Listings";
