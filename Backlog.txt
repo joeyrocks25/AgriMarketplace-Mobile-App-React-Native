@@ -4,7 +4,6 @@
 - View listings by location nearest
 - Ensure logged in user can't view 
 - Add multiple images that are swipable for listing or view more
-- Upload user profile photo
 - edit/delete profile
 - Need to fix navigation for swiping out of listingdetailsscreen
 - Rework listingeditscreen
@@ -31,7 +30,6 @@
 Value vs effort matrix
 
 Quick wins:
-- Upload user profile photo
 - edit/delete profile
 - Add tiles to listingdetailsscreen
 - Add uuid for messages
