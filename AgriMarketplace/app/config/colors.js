@@ -1,7 +1,7 @@
 export default {
   primary: "#f5aa30",
   secondary: "#e57e26",
-  black: "#000",
+  black: "#555",
   white: "#fff",
   medium: "#6e6969",
   light: "#f8f4f4",
@@ -18,6 +18,6 @@ export default {
   cars: "#26de81",   
   tools: "#2bcbba",        
   other: "#778ca3",
-  test: "#FAFAFA",
+  test: "#F5F5F5",
   test2: "#D3D3D3",
 }

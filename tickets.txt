@@ -24,3 +24,4 @@
     - Added triple level uuid for conversation security
     - Fixed bug for messages
     - Fixed bug for default profile photo
+12. Add tiles to listingdetailsscreen

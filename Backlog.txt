@@ -1,5 +1,4 @@
 (Backlog) To do:
-- Add tiles to listingdetailsscreen
 - Make listing user clickable to view their profile and other listings
 - View listings by location nearest
 - Ensure logged in user can't view 
@@ -9,7 +8,6 @@
 - Rework listingeditscreen
 - Setup Card payment system for ads
 - Show if message read or not
-- Add uuid for messages
 - Add notifications
 - test location on android
 - Timer for listing posted
@@ -30,7 +28,11 @@
 Value vs effort matrix
 
 Quick wins:
-- Add tiles to listingdetailsscreen
+- Rework listingeditscreen
+- Setup Card payment system for ads
+- Make listing user clickable to view their profile and other listings
+- Timer for listing posted
+- Add multiple images that are swipable for listing or view more
 
 Fill-ins:
 - View listings by location nearest
@@ -40,23 +42,18 @@ Fill-ins:
 - Ensure logged in user can't view (add later due to testing purposes)
 - Need to fix navigation for swiping out of listingdetailsscreen
 - test location on android
-- Timer for listing posted
 - Accessibility features?
 - Bug check
 
 Major projects:
+- Possible support/assistance bot else contact info for help
 - edit/delete profile (may require backend rework first)
-- Rework listingeditscreen
-- Make listing user clickable to view their profile and other listings
-- Add multiple images that are swipable for listing or view more
-- Setup Card payment system for ads
 - Add notifications
 - Azure cloud infrastructure backend
 - Advertisements?
 
 Long-term projects:
 - content moderator for azure blob images
-- Possible support/assistance bot else contact info for help
 - Could improve search with algorithm or some sort of machine learning/ai
 - Possible recommendations for haulers if view livestock - pay for hauler advertisements area based?
 - Reviews/feedback system?
