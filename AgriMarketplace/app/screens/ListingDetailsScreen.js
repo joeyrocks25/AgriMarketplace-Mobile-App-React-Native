@@ -7,7 +7,7 @@ import {
   Image as RNImage
 } from "react-native";
 import { Image as ExpoImage } from "react-native-expo-image-cache";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import ContactSellerForm from "../components/ContactSellerForm";
 import ListItem from "../components/lists/ListItem";
@@ -183,6 +183,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
           uri={item.images[0].url}
         />
         <View style={styles.detailsContainer}>
+          
           <View style={styles.titleContainer}>
             <View style={styles.titleFavoriteContainer}>
               <Text style={styles.title}>{item.title}</Text>
@@ -191,7 +192,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
                   <FontAwesome
                     name={isFavorite ? "heart" : "heart-o"}
                     size={28}
-                    color={isFavorite ? "red" : "red"}
+                    color={isFavorite ? "red" : colors.medium}
                     style={styles.heartIcon}
                   />
                 </TouchableWithoutFeedback>
@@ -199,17 +200,20 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
             </View>
             {distance && (
               <View style={styles.locationContainer}>
-                <FontAwesome name="map-marker" size={20} color={"red"} />
-                <Text style={styles.distance}>{distance} miles away</Text>
+                <FontAwesome name="map-marker" size={20} color={colors.black} />
+                <Text style={ colors.black }>  {distance} miles away</Text>
               </View>
             )}
           </View>
           <View style={styles.priceFavoriteContainer}>
-            <Text style={styles.price}>£{item.price}</Text>
-          </View>
+          <Text style={styles.price}>
+            <MaterialCommunityIcons name="currency-gbp" size={18} color={colors.black} />{item.price}
+          </Text>
+        </View>
           {listingDescription !== "" && (
             <Text style={styles.description}>{listingDescription}</Text>
           )}
+        </View>
           <View style={{ marginTop: 20 }}>
             {userDetails && (
               <React.Fragment>
@@ -224,8 +228,6 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
                 />
               </React.Fragment>
             )}
-          </View>
-
           <RNGHTouchableWithoutFeedback
             onPress={() => setFormVisible(true)}
           >
@@ -233,11 +235,13 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
           </RNGHTouchableWithoutFeedback>
         </View>
       </ScrollView>
-      <ContactSellerForm
-        listing={item}
-        visible={formVisible}
-        onClose={() => setFormVisible(false)}
-      />
+      <View style={styles.ContactSellerForm}>
+        <ContactSellerForm
+          listing={item}
+          visible={formVisible}
+          onClose={() => setFormVisible(false)}
+        />
+      </View>
     </View>
     // </Screen>
   );
@@ -247,34 +251,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.test,
+    
+  },
+  detailsContainer: {
+    padding: 15,
+    backgroundColor: colors.white,
+  },
+  ContactSellerForm: {
+    backgroundColor: colors.white,
   },
   container2: {
     marginLeft: 5,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: colors.white,
+    padding: 5,
   },
   avatarContainer: {
     borderColor: colors.middle_orange,
     borderWidth: 2,
-    borderRadius: 50,
+    borderRadius: 37.5,
     overflow: "hidden",
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
   },
   avatar: {
     width: "100%",
     height: "100%",
-    borderRadius: 50,
+    borderRadius: 37.5,
   },
   textContainer: {
     marginLeft: 10,
   },
   scrollView: {
     flex: 1,
-  },
-  detailsContainer: {
-    padding: 20,
+    // backgroundColor: "black",
   },
   image: {
     width: "100%",
@@ -287,8 +298,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   price: {
-    color: colors.dark_green,
-    fontWeight: "bold",
+    color: colors.black,
+    // fontWeight: "bold",
     fontSize: 20,
   },
   titleContainer: {
@@ -321,7 +332,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    marginTop: 10,
+    // marginTop: 5,
   },
   userContainer: {
     marginVertical: 20,
