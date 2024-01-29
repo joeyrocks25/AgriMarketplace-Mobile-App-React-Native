@@ -1,0 +1,7 @@
+to activate virtual env
+.\venv\Scripts\activate
+
+cd ./chatbot
+
+to run bot:
+- rasa shell
