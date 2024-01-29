@@ -18,37 +18,30 @@ const getListingById = async (id) => {
   }
 };
 
-export const addListing = async (listing, onUploadProgress) => {
-  const data = new FormData();
-  data.append("title", listing.title);
-  data.append("price", listing.price);
-  data.append("categoryId", listing.category.value);
-  data.append("description", listing.description);
-  data.append("userId", listing.userId); // Include the userId from the listing
-
-  listing.images.forEach((image, index) =>
-    data.append("images", {
-      name: "image" + index,
-      type: "image/jpeg",
-      uri: image,
-    })
-  );
-
-  if (listing.location)
-    data.append("location", JSON.stringify(listing.location));
-
+const addListing = async (listing) => {
   const fullEndpoint = client.getBaseURL() + endpoint;
-  console.log("API Endpoint:", fullEndpoint); // Log the endpoint
+  console.log("API Endpoint:", fullEndpoint);
 
   try {
-    const response = await axios.post(fullEndpoint, data, {
-      headers: { "Content-Type": "multipart/form-data" },
-      onUploadProgress,
+    const response = await fetch(fullEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(listing),
     });
 
-    return response.data;
+    const result = await response.json();
+    console.log(result);
+
+    if (!response.ok) {
+      console.error("API Error:", result.error || "Could not save the listing");
+      return Promise.reject("Could not save the listing");
+    }
+
+    return result;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Network Error:", error);
     throw error;
   }
 };

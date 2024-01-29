@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { StyleSheet, Keyboard } from "react-native";
+import React from "react";
+import { StyleSheet, Keyboard, Alert, View, Platform } from "react-native";
+import { FAB } from "react-native-paper";
 import * as Yup from "yup";
-
 import {
   Form,
   FormField,
   FormPicker as Picker,
-  SubmitButton,
 } from "../components/forms";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import Screen from "../components/Screen";
@@ -14,10 +13,11 @@ import FormImagePicker from "../components/forms/FormImagePicker";
 import listingsApi from "../api/listings";
 import useLocation from "../hooks/useLocation";
 import UploadScreen from "./UploadScreen";
-import * as FileSystem from "expo-file-system";
-import { Alert } from "react-native";
 import colors from "../config/colors";
 import useAuth from "../auth/useAuth";
+import FabButton from "../components/forms/FabButton";
+import FabButtonCancel from "../components/forms/FabButtonCancel";
+import defaultStyles from "../config/styles";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -66,14 +66,11 @@ const categories = [
   },
 ];
 
-function ListingEditScreen() {
+function ListingEditScreen({ navigation }) {
   const { user } = useAuth();
-  console.log(user);
   const location = useLocation();
-  // const [uploadVisible, setUploadVisible] = useState(false);
-  // const [progress, setProgress] = useState(0);
 
-  const convertBlobToBase64 = (blob) => {
+  const convertBlobToBase64 = async (blob) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onerror = reject;
@@ -85,11 +82,6 @@ function ListingEditScreen() {
   };
 
   const handleSubmit = async (listing, { resetForm }) => {
-    console.log(listing);
-    // setProgress(0);
-    // setUploadVisible(true);
-
-    // Extract the categoryId from the category object
     const { category, ...rest } = listing;
     const categoryId = category ? category.value : null;
 
@@ -113,41 +105,29 @@ function ListingEditScreen() {
       location,
       userId: user.userId,
     };
-    console.log(finalListing); // Log the final listing object before sending it to the server
 
     try {
-      const response = await fetch("http://192.168.1.130:9000/api/listings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(finalListing),
-      });
+      const result = await listingsApi.addListing(finalListing);
 
-      const result = await response.json();
-
-      console.log(result); // Add this line to see the response from the server
-
-      if (!response.ok) {
-        setUploadVisible(false);
-        return alert("Could not save the listing");
-      } else {
-        resetForm();
-        Alert.alert("Success", "listing posted successfully!");
-        Keyboard.dismiss(); // Dismiss the keyboard
-      }
+      resetForm();
+      Alert.alert("Success", "Listing posted successfully!");
+      Keyboard.dismiss();
     } catch (error) {
       console.error("Error:", error);
+      Alert.alert("Error", "Could not save the listing");
     }
   };
 
+  const handleCancel = (resetForm) => {
+    // Reset the form to initial values
+    resetForm();
+    Keyboard.dismiss();
+  };
+  
+
   return (
     <Screen style={styles.container}>
-      <UploadScreen
-      // onDone={() => setUploadVisible(false)}
-      // progress={progress}
-      // visible={uploadVisible}
-      />
+      <UploadScreen />
       <Form
         initialValues={{
           title: "",
@@ -159,34 +139,37 @@ function ListingEditScreen() {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <FormImagePicker name="images" />
-        <FormField maxLength={255} name="title" placeholder="Title" />
-        <FormField
-          keyboardType="numeric"
-          maxLength={8}
-          name="price"
-          placeholder="Price"
-          width={120}
-        />
-        <Picker
-          items={categories}
-          name="category"
-          numberOfColumns={3}
-          PickerItemComponent={CategoryPickerItem}
-          placeholder="Category"
-          width="50%"
-        />
-        <FormField
-          maxLength={255}
-          multiline
-          name="description"
-          numberOfLines={3}
-          placeholder="Description"
-        />
-        <SubmitButton
-          title="Post"
-          color={colors.light_orange} // Set the button color to dark_orange
-        />
+        <View style={styles.upperContainer}>
+          <View style={styles.upperContainer2}>
+            <FormImagePicker name="images" />
+          </View>
+          <FormField maxLength={55} name="title" placeholder="Title" />
+          <FormField
+            keyboardType="numeric"
+            maxLength={8}
+            name="price"
+            placeholder="Price (£)"
+            width="100%"
+          />
+          <Picker
+            items={categories}
+            name="category"
+            numberOfColumns={3}
+            PickerItemComponent={CategoryPickerItem}
+            placeholder="Category"
+            width="100%"
+          />
+          <FormField
+            maxLength={255}
+            multiline
+            name="description"
+            numberOfLines={3}
+            placeholder="Description"
+            style={styles.descriptionInput}
+          />
+        </View>
+        <FabButton title="Post" color={colors.light_orange} onPress={handleSubmit} />
+        <FabButtonCancel title="Cancel" color={colors.gray} onPress={handleCancel} />
       </Form>
     </Screen>
   );
@@ -194,7 +177,20 @@ function ListingEditScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    backgroundColor: colors.test,
+  },
+  upperContainer: {
+    marginTop: Platform.OS === 'ios' ? 20 : -5,
+  },
+  upperContainer2: {
+    marginBottom: 10,
+  },
+  descriptionInput: {
+    height: 80,
+    textAlignVertical: 'top',
+    fontSize: 18,
+    ...defaultStyles.text,
   },
 });
+
 export default ListingEditScreen;

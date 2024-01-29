@@ -91,7 +91,7 @@ const AppNavigator = () => {
       />
     
       <Tab.Screen
-        name="ListingEdit"
+        name="Post an ad"
         component={ListingEditScreen}
         options={({ navigation }) => ({
           tabBarButton: () => (
