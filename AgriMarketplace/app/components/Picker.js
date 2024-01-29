@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import colors from "../config/colors";
 import Text from "./Text";
 import defaultStyles from "../config/styles";
 import PickerItem from "./PickerItem";
@@ -77,11 +78,13 @@ function AppPicker({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: defaultStyles.colors.light,
-    borderRadius: 25,
+    backgroundColor: "white",
+    borderRadius: 0,
     flexDirection: "row",
     padding: 15,
     marginVertical: 10,
+    borderWidth: 0.5,
+    borderColor: colors.test2,
   },
   icon: {
     marginRight: 10,
