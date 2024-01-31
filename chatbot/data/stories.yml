@@ -1,0 +1,83 @@
+version: "2.0"
+
+stories:
+- story: User greets, confirms greet, and then reacts based on user's response
+  steps:
+  - intent: greet
+  - action: action_confirm_greet
+  - checkpoint: confirm_greet_checkpoint
+
+- story: React based on user's response after greeting and confirmation
+  steps:
+  - checkpoint: confirm_greet_checkpoint
+  - intent: deny
+  - action: utter_goodbye
+
+- story: React based on user's response after greeting and confirmation
+  steps:
+  - checkpoint: confirm_greet_checkpoint
+  - intent: affirm
+  - action: utter_greet
+
+
+
+# - story: User interacts with the bot and asks for help
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: ask_for_help
+#   - action: utter_ask_for_help
+
+# - story: User wants to post an ad directly
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: post_ad
+#   - action: utter_post_ad
+#   - action: utter_ask_confirmation
+#   - intent: deny
+#   - action: utter_retry_ask_for_help
+
+# - story: User wants to search for listings directly
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: search_listings
+#   - action: utter_search_listings
+#   - action: utter_ask_confirmation
+#   - intent: deny
+#   - action: utter_retry_ask_for_help
+
+# - story: User wants to edit account details directly
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: edit_account
+#   - action: utter_edit_account
+#   - action: utter_ask_confirmation
+#   - intent: deny
+#   - action: utter_retry_ask_for_help
+
+# - story: User interacts with the bot and asks for help, then chooses to post an ad
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: ask_for_help
+#   - action: utter_ask_for_help
+#   - intent: post_ad
+#   - action: utter_post_ad
+#   - action: utter_ask_confirmation
+#   - intent: deny
+#   - action: utter_retry_ask_for_help
+
+# - story: User denies after direct action, triggers ask_for_help
+#   steps:
+#   - intent: affirm
+#   - action: utter_thanks
+
+# - story: User confirms after asking for help
+#   steps:
+#   - intent: ask_for_help
+#   - action: utter_ask_for_help
+#   - intent: affirm
+#   - action: utter_thanks

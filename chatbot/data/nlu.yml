@@ -1,0 +1,53 @@
+version: "2.0"
+
+nlu:
+- intent: greet
+  examples: |
+    - hi
+    - hello
+    - hey
+    - hi there
+
+- intent: ask_for_help
+  examples: |
+    - How can you help?
+    - What can you do for me?
+    - I need assistance
+    - Can you help me?
+
+- intent: post_ad
+  examples: |
+    - I want to post an ad
+    - How can I list something?
+    - Post an ad
+    - Create a new listing
+
+- intent: search_listings
+  examples: |
+    - Search for listings
+    - Find available listings
+    - Show me listings
+    - Search properties
+
+- intent: edit_account
+  examples: |
+    - Edit my account
+    - Update profile details
+    - Change account information
+    - Modify user account
+
+- intent: affirm
+  examples: |
+    - Yes
+    - That's correct
+    - Sure
+    - I confirm
+    - Indeed
+
+- intent: deny
+  examples: |
+    - No
+    - That's not right
+    - I disagree
+    - Incorrect
+    - No, thank you

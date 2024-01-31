@@ -1,0 +1,17 @@
+- story: User greets, confirms greet, and then reacts based on user's response
+  steps:
+  - intent: greet
+  - action: action_confirm_greet
+  - checkpoint: confirm_greet_checkpoint
+
+- story: React based on user's response after greeting and confirmation
+  steps:
+  - checkpoint: confirm_greet_checkpoint
+  - intent: deny
+  - action: utter_goodbye
+
+- story: React based on user's response after greeting and confirmation
+  steps:
+  - checkpoint: confirm_greet_checkpoint
+  - intent: affirm
+  - action: utter_greet

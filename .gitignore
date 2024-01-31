@@ -1,0 +1,10 @@
+# .gitignore
+
+# virtual env
+venv/
+
+# chatbot cache
+chatbot/.rasa
+
+# chatbot models
+chatbot/models
