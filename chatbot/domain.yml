@@ -1,0 +1,43 @@
+version: "2.0"
+
+intents:
+  - greet
+  - ask_for_help
+  - retry_ask_for_help
+  - post_ad
+  - search_listings
+  - edit_account
+  - affirm
+  - deny
+  - goodbye
+
+responses:
+  utter_greet:
+    - text: "Hello! How can I help you today?"
+
+  utter_goodbye:
+    - text: "Goodbye for now!"  
+
+  utter_ask_for_help:
+    - text: "I can assist you with posting an ad, searching for listings, or editing your account. What would you like to do?"
+
+  utter_retry_ask_for_help:
+    - text: "Sorry about that. I can assist you with posting an ad, searching for listings, or editing your account. What would you like to do?"
+
+  utter_post_ad:
+    - text: "To post an ad, you can go to the 'Post Ad' section on your profile."
+
+  utter_search_listings:
+    - text: "To search for listings, visit the 'Search Listings' page on our platform."
+
+  utter_edit_account:
+    - text: "To edit your account, navigate to the 'Account Settings' on your profile."
+
+  utter_ask_confirmation:
+    - text: "Did I understand correctly?"
+
+  utter_thanks:
+    - text: "Great! If you have any more questions or need further assistance, feel free to ask. Have a wonderful day!"
+
+actions:
+- action_confirm_greet

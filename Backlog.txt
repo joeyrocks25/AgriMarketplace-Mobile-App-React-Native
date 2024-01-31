@@ -12,7 +12,6 @@
 - Timer for listing posted
 - Azure cloud infrastructure backend
 - content moderator for azure blob images
-- Possible support/assistance bot else contact info for help
 - Accessibility features?
 - Could improve search with algorithm or some sort of machine learning/ai 
 - Advertisements?
@@ -23,6 +22,7 @@
 - tidy endpoints
 - User listings & favourites navigation fix
 - User listings & favourites card rework + delete favourite
+- Further develop support/assistance bot
 
 Value vs effort matrix
 
@@ -44,7 +44,7 @@ Fill-ins:
 - Bug check
 
 Major projects:
-- Possible support/assistance bot else contact info for help
+- Further develop support/assistance bot
 - edit/delete profile (may require backend rework first)
 - Add notifications
 - Azure cloud infrastructure backend
