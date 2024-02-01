@@ -27,12 +27,13 @@
 Value vs effort matrix
 
 Quick wins:
-- Setup Card payment system for ads
+- Recommendations for haulers if view livestock and improve listingdetailsscreen
 - Make listing user clickable to view their profile and other listings
-- Timer for listing posted
-- Add multiple images that are swipable for listing or view more
 
 Fill-ins:
+- Add multiple images that are swipable for listing or view more
+- Timer for listing posted
+- Setup Card payment system for ads
 - View listings by location nearest
 - User listings & favourites navigation fix
 - User listings & favourites card rework + delete favourite
@@ -53,7 +54,6 @@ Major projects:
 Long-term projects:
 - content moderator for azure blob images
 - Could improve search with algorithm or some sort of machine learning/ai
-- Possible recommendations for haulers if view livestock - pay for hauler advertisements area based?
 - Reviews/feedback system?
 - Possibly filtering?
 

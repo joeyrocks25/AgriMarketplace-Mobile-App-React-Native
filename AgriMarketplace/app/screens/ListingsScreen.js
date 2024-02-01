@@ -23,6 +23,7 @@ import favouritesApi from "../api/favourites";
 import { Platform } from "react-native";
 
 function ListingsScreen({ navigation }) {
+  console.log("navaaa", navigation);
   const route = useRoute();
   const location = useLocation();
   const categoryId = route.params?.categoryId;
@@ -41,9 +42,10 @@ function ListingsScreen({ navigation }) {
   }
 
   const categoryNameShadowOpt = {
-    width: Platform.OS === "ios"
-      ? Dimensions.get("window").width - 40
-      : Dimensions.get("window").width - 80,
+    width:
+      Platform.OS === "ios"
+        ? Dimensions.get("window").width - 40
+        : Dimensions.get("window").width - 80,
     height: 40,
     color: "#000",
     border: 10,
@@ -163,7 +165,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     marginBottom: 0,
-    maxWidth: Platform.OS === "ios" ? Dimensions.get("window").width - 10 : Dimensions.get("window").width - 80, // Set a different maxWidth for iOS
+    maxWidth:
+      Platform.OS === "ios"
+        ? Dimensions.get("window").width - 10
+        : Dimensions.get("window").width - 80, // Set a different maxWidth for iOS
     // alignSelf: "center", // Center the categoryHUD
   },
   checkIcon: {

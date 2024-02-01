@@ -27,3 +27,4 @@
 12. Add tiles to listingdetailsscreen + rework of value/effort matrix
 13. Rework listingeditscreen
 14. MVP chatbot for assistance 
+15. Recommendations for haulers if view livestock and improve listingdetailsscreen
