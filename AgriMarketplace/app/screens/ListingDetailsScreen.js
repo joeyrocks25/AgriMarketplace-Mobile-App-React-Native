@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
+  FlatList,
   View,
   StyleSheet,
   ScrollView,
   TouchableWithoutFeedback,
   Image as RNImage,
 } from "react-native";
+import ActivityIndicator from "../components/ActivityIndicator";
 import { Image as ExpoImage } from "react-native-expo-image-cache";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
@@ -19,6 +21,8 @@ import usersApi from "../api/users";
 import favouritesApi from "../api/favourites";
 import useAuth from "../auth/useAuth";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
+import CardSuggestions from "../components/CardSuggestions";
+import routes from "../navigation/routes";
 
 function CustomAvatar({ imageUri, username, userListingsCount }) {
   const listingsText = userListingsCount === 1 ? "Listing" : "Listings";
@@ -41,18 +45,30 @@ function CustomAvatar({ imageUri, username, userListingsCount }) {
 }
 
 function ListingDetailsScreen({ route, onScreenFocus }) {
+  const scrollViewRef = useRef();
+  const categoryId = route.params?.item?.categoryId;
+  console.log("category iddeeddd", categoryId);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const { item, origin } = route.params;
-
   const location = useLocation();
   const { user } = useAuth();
   let userLocation = null;
+
+  const getListingsApi = useApi(() =>
+    listingsApi.getListings(null, categoryId)
+  );
+
+  useEffect(() => {
+    getListingsApi.request();
+  }, [categoryId]);
 
   useEffect(() => {
     if (isFocused) {
       console.log("ListingDetailsScreen is focused1");
       onScreenFocus && onScreenFocus(true);
+      // Scroll to the top of the screen when the screen is focused
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     } else {
       console.log("ListingDetailsScreen is unfocused1");
       onScreenFocus && onScreenFocus(false);
@@ -156,7 +172,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
 
     fetchListings();
     fetchUser();
-  }, [userId, isFocused]);
+  }, [userId, isFocused, categoryId]); // Include categoryId in the dependency array
 
   const [formVisible, setFormVisible] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -167,7 +183,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         <ExpoImage
           style={styles.image}
           preview={{ uri: item.images[0].thumbnailUrl }}
@@ -279,6 +295,27 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
               <Text style={styles.youMayAlsoLikeText}>
                 You may also like...
               </Text>
+              {getListingsApi.loading ? (
+                <ActivityIndicator visible={true} />
+              ) : (
+                <FlatList
+                  horizontal
+                  data={getListingsApi.data}
+                  keyExtractor={(listing) => listing.id.toString()}
+                  renderItem={({ item }) => (
+                    <CardSuggestions
+                      title={item.title}
+                      subTitle={"£" + item.price}
+                      imageUrl={item.images[0].url}
+                      customWidth={150} // Adjust width accordingly
+                      onPress={() =>
+                        navigation.navigate(routes.LISTING_DETAILS, { item })
+                      }
+                    />
+                  )}
+                  ItemSeparatorComponent={() => <View style={{ width: 10 }} />} // Adjust the width to add space
+                />
+              )}
             </View>
           </View>
 
@@ -319,6 +356,7 @@ const styles = StyleSheet.create({
   },
   youMayAlsoLike: {
     marginTop: 20,
+    marginBottom: -65,
     padding: 15,
     // paddingBottom: 0,
     backgroundColor: colors.white,
@@ -330,7 +368,8 @@ const styles = StyleSheet.create({
   youMayAlsoLikeText: {
     fontSize: 18,
     fontWeight: "500",
-    height: 100,
+    marginBottom: 10,
+    // height: 100,
     // color: colors.middle_orange,
     // textDecorationLine: "underline",
   },
