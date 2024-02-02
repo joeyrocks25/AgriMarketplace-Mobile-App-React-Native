@@ -9,4 +9,6 @@ export default Object.freeze({
   CATEGORY_SELECT: "Categories",
   SAVED_LISTINGS: "Saved Listings",
   MESSAGES_CONVERSATION: "Conversation",
+  SELLER_DETAILS: "Seller Details",
+  HAULERS_SCREEN: "Haulers",
 });

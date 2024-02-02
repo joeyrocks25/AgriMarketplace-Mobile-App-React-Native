@@ -6,8 +6,10 @@ import CategorySelectScreen from "../screens/CategorySelectScreen";
 import ListingsScreen from "../screens/ListingsScreen";
 import ListingDetailsScreen from "../screens/ListingDetailsScreen";
 import ListingEditScreen from "../screens/ListingEditScreen";
+import SellerDetailsScreen from "../screens/SellerDetailsScreen";
 import MessagesScreen from "../screens/MessagesScreen";
 import MessagesConversation from "../screens/MessagesConversation"; // Import the MessagesConversation component
+import HaulersScreen from "../screens/HaulersScreen";
 import SearchBarScreen from "../screens/SearchBarScreen";
 import AccountNavigator from "./AccountNavigator";
 import NewListingButton from "./NewListingButton";
@@ -26,7 +28,34 @@ const HomeStack = ({ setShowTabBar }) => (
       {(props) => (
         <ListingDetailsScreen
           {...props}
-          onScreenFocus={(isFocused) => setShowTabBar(!isFocused)}
+          onScreenFocus={(isFocused) => {
+            console.log("ListingDetailsScreennn is focused:", isFocused);
+            setShowTabBar(!isFocused);
+          }}
+          isFocused={props.navigation.isFocused()}
+        />
+      )}
+    </Stack.Screen>
+    <Stack.Screen name="Seller Details">
+      {(props) => (
+        <SellerDetailsScreen
+          {...props}
+          onScreenFocus={(isFocused) => {
+            console.log("SellerDetailsScreennnn is focused:", isFocused);
+            setShowTabBar(!isFocused);
+          }}
+          isFocused={props.navigation.isFocused()}
+        />
+      )}
+    </Stack.Screen>
+    <Stack.Screen name="Haulers">
+      {(props) => (
+        <HaulersScreen
+          {...props}
+          onScreenFocus={(isFocused) => {
+            console.log("Haulers Screennnn is focused:", isFocused);
+            setShowTabBar(!isFocused);
+          }}
           isFocused={props.navigation.isFocused()}
         />
       )}
@@ -37,7 +66,10 @@ const HomeStack = ({ setShowTabBar }) => (
 const MessagesStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Messages" component={MessagesScreen} />
-    <Stack.Screen name={routes.MESSAGES_CONVERSATION} component={MessagesConversation} />
+    <Stack.Screen
+      name={routes.MESSAGES_CONVERSATION}
+      component={MessagesConversation}
+    />
   </Stack.Navigator>
 );
 
@@ -51,7 +83,11 @@ const AppNavigator = () => {
   }, []); // Run this effect once when the component mounts
 
   return (
-    <Tab.Navigator initialRouteName="home" tabBarOptions={{ showLabel: false }} tabBar={showTabBar ? undefined : () => null}>
+    <Tab.Navigator
+      initialRouteName="home"
+      tabBarOptions={{ showLabel: false }}
+      tabBar={showTabBar ? undefined : () => null}
+    >
       <Tab.Screen
         name="Home"
         options={{
@@ -61,11 +97,11 @@ const AppNavigator = () => {
           tabBarShowLabel: true,
           tabBarStyle: [
             {
-              display: 'flex',
+              display: "flex",
             },
             null,
           ],
-          tabBarLabel: 'Feed',
+          tabBarLabel: "Feed",
           headerShown: false, // Hide header for the "Home" screen
         }}
       >
@@ -82,28 +118,34 @@ const AppNavigator = () => {
           tabBarShowLabel: true,
           tabBarStyle: [
             {
-              display: 'flex',
+              display: "flex",
             },
             null,
           ],
-          tabBarLabel: 'Search',
+          tabBarLabel: "Search",
         }}
       />
-    
+
       <Tab.Screen
         name="Post an ad"
         component={ListingEditScreen}
         options={({ navigation }) => ({
           tabBarButton: () => (
-            <NewListingButton onPress={() => navigation.navigate(routes.LISTING_EDIT)} />
+            <NewListingButton
+              onPress={() => navigation.navigate(routes.LISTING_EDIT)}
+            />
           ),
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="plus-circle" color={color} size={size} />
+            <MaterialCommunityIcons
+              name="plus-circle"
+              color={color}
+              size={size}
+            />
           ),
           tabBarShowLabel: true,
           tabBarStyle: [
             {
-              display: 'flex',
+              display: "flex",
             },
             null,
           ],
@@ -114,19 +156,23 @@ const AppNavigator = () => {
         component={MessagesStack} // Use the MessagesStack component
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="message-text-outline" color={color} size={size} />
+            <MaterialCommunityIcons
+              name="message-text-outline"
+              color={color}
+              size={size}
+            />
           ),
           tabBarShowLabel: true,
           tabBarStyle: [
             {
-              display: 'flex',
+              display: "flex",
             },
             null,
           ],
-          tabBarLabel: 'Messages',
+          tabBarLabel: "Messages",
         }}
       />
-  
+
       <Tab.Screen
         name="Account"
         component={AccountNavigator}
@@ -137,11 +183,11 @@ const AppNavigator = () => {
           tabBarShowLabel: true,
           tabBarStyle: [
             {
-              display: 'flex',
+              display: "flex",
             },
             null,
           ],
-          tabBarLabel: 'Account',
+          tabBarLabel: "Account",
           headerShown: false, // Hide header for the "Home" screen
         }}
       />

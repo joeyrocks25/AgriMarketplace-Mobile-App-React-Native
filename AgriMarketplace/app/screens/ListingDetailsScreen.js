@@ -24,36 +24,53 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import CardSuggestions from "../components/CardSuggestions";
 import routes from "../navigation/routes";
 
-function CustomAvatar({ imageUri, username, userListingsCount }) {
+function CustomAvatar({ imageUri, username, userListingsCount, onPress }) {
   const listingsText = userListingsCount === 1 ? "Listing" : "Listings";
 
   return (
-    <View style={styles.shadowContainer}>
-      <View style={styles.container2}>
-        <View style={styles.avatarContainer}>
-          <RNImage source={{ uri: imageUri }} style={styles.avatar} />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.username}>{username}</Text>
-          <Text style={styles.userListingsCount}>
-            {userListingsCount} {listingsText}
-          </Text>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={styles.shadowContainer}>
+        <View style={styles.container2}>
+          <View style={styles.avatarContainer}>
+            <RNImage source={{ uri: imageUri }} style={styles.avatar} />
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.username}>{username}</Text>
+            <Text style={styles.userListingsCount}>
+              {userListingsCount} {listingsText}
+            </Text>
+          </View>
+          <FontAwesome
+            name="angle-right"
+            size={24}
+            color={colors.dark}
+            style={styles.arrowIcon}
+          />
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 function ListingDetailsScreen({ route, onScreenFocus }) {
   const scrollViewRef = useRef();
+  const { item, origin } = route.params;
   const categoryId = route.params?.item?.categoryId;
-  console.log("category iddeeddd", categoryId);
+  const userId = item.userId;
+
+  console.log("useridddd is ", userId);
+
+  if (userId === undefined) {
+    console.log("Category ID is undefined:", route.params);
+  }
+
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const { item, origin } = route.params;
+
   const location = useLocation();
   const { user } = useAuth();
   let userLocation = null;
+  console.log("uzrrrr id", item);
 
   const getListingsApi = useApi(() =>
     listingsApi.getListings(null, categoryId)
@@ -67,7 +84,6 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
     if (isFocused) {
       console.log("ListingDetailsScreen is focused1");
       onScreenFocus && onScreenFocus(true);
-      // Scroll to the top of the screen when the screen is focused
       scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     } else {
       console.log("ListingDetailsScreen is unfocused1");
@@ -84,14 +100,18 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
     console.log("Location is not available");
   }
 
-  const sellerLocation = {
-    latitude: item.location.latitude,
-    longitude: item.location.longitude,
-  };
+  const sellerLocation =
+    item && item.location
+      ? {
+          latitude: item.location.latitude,
+          longitude: item.location.longitude,
+        }
+      : null;
 
-  const distance = userLocation ? (
-    <DistanceCalculator location1={sellerLocation} location2={userLocation} />
-  ) : null;
+  const distance =
+    userLocation && sellerLocation ? (
+      <DistanceCalculator location1={sellerLocation} location2={userLocation} />
+    ) : null;
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [loadingFavorite, setLoadingFavorite] = useState(false);
@@ -129,11 +149,12 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
   };
 
   const handleLookingForHaulersPress = () => {
+    navigation.navigate(routes.HAULERS_SCREEN, {
+      onScreenFocus: onScreenFocus,
+    });
+
     console.log("Clicked on 'Looking for local haulers'");
   };
-
-  const userId = item.userId;
-  console.log("uzrrrr id", userId);
 
   const [userListingsCount, setUserListingsCount] = useState(0);
   const [userDetails, setUserDetails] = useState(null);
@@ -172,7 +193,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
 
     fetchListings();
     fetchUser();
-  }, [userId, isFocused, categoryId]); // Include categoryId in the dependency array
+  }, [userId, isFocused, categoryId]);
 
   const [formVisible, setFormVisible] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -236,12 +257,16 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
           {userDetails && (
             <React.Fragment>
               {console.log("UserDetails:", userDetails.data)}
-              {console.log("Profile Image URL:", userDetails.data.profileImage)}
-
+              {console.log("user datas", userDetails.data)}
               <CustomAvatar
                 imageUri={userDetails.data.profileImage}
                 username={userDetails.data.username}
                 userListingsCount={userListingsCount}
+                onPress={() => {
+                  navigation.navigate(routes.SELLER_DETAILS, {
+                    userDetailsData: userDetails.data,
+                  });
+                }}
               />
             </React.Fragment>
           )}
@@ -307,13 +332,13 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
                       title={item.title}
                       subTitle={"£" + item.price}
                       imageUrl={item.images[0].url}
-                      customWidth={150} // Adjust width accordingly
+                      customWidth={150}
                       onPress={() =>
                         navigation.navigate(routes.LISTING_DETAILS, { item })
                       }
                     />
                   )}
-                  ItemSeparatorComponent={() => <View style={{ width: 10 }} />} // Adjust the width to add space
+                  ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
                 />
               )}
             </View>
@@ -358,20 +383,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: -65,
     padding: 15,
-    // paddingBottom: 0,
     backgroundColor: colors.white,
     borderWidth: 0.6,
     borderColor: colors.test2,
-    // width: "94%",
-    // alignSelf: "center",
   },
   youMayAlsoLikeText: {
     fontSize: 18,
     fontWeight: "500",
     marginBottom: 10,
-    // height: 100,
-    // color: colors.middle_orange,
-    // textDecorationLine: "underline",
   },
   titleContainer: {
     flexDirection: "column",
@@ -507,6 +526,10 @@ const styles = StyleSheet.create({
   },
   ContactSellerForm: {
     backgroundColor: colors.white,
+  },
+  arrowIcon: {
+    marginLeft: "auto",
+    marginRight: 10,
   },
 });
 

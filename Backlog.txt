@@ -27,8 +27,6 @@
 Value vs effort matrix
 
 Quick wins:
-- Recommendations for haulers if view livestock and improve listingdetailsscreen
-- Make listing user clickable to view their profile and other listings
 
 Fill-ins:
 - Add multiple images that are swipable for listing or view more
