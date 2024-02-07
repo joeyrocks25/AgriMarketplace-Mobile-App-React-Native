@@ -2,11 +2,7 @@ import React from "react";
 import { StyleSheet, Keyboard, Alert, View, Platform } from "react-native";
 import { FAB } from "react-native-paper";
 import * as Yup from "yup";
-import {
-  Form,
-  FormField,
-  FormPicker as Picker,
-} from "../components/forms";
+import { Form, FormField, FormPicker as Picker } from "../components/forms";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import Screen from "../components/Screen";
 import FormImagePicker from "../components/forms/FormImagePicker";
@@ -123,7 +119,6 @@ function ListingEditScreen({ navigation }) {
     resetForm();
     Keyboard.dismiss();
   };
-  
 
   return (
     <Screen style={styles.container}>
@@ -168,8 +163,16 @@ function ListingEditScreen({ navigation }) {
             style={styles.descriptionInput}
           />
         </View>
-        <FabButton title="Post" color={colors.light_orange} onPress={handleSubmit} />
-        <FabButtonCancel title="Cancel" color={colors.gray} onPress={handleCancel} />
+        <FabButton
+          title="Post"
+          color={colors.light_orange}
+          onPress={handleSubmit}
+        />
+        <FabButtonCancel
+          title="Cancel"
+          color={colors.gray}
+          onPress={handleCancel}
+        />
       </Form>
     </Screen>
   );
@@ -180,14 +183,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.test,
   },
   upperContainer: {
-    marginTop: Platform.OS === 'ios' ? 20 : -5,
+    marginTop: Platform.OS === "ios" ? 20 : -5,
   },
   upperContainer2: {
     marginBottom: 10,
   },
   descriptionInput: {
     height: 80,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
     fontSize: 18,
     ...defaultStyles.text,
   },

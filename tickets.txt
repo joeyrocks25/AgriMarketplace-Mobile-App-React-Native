@@ -28,4 +28,8 @@
 13. Rework listingeditscreen
 14. MVP chatbot for assistance 
 15. Recommendations for haulers if view livestock and improve listingdetailsscreen
-16. Make listing user clickable to view their profile and other listings + navigation for hauler screen
+16. Updated userlistingdetailsscreen
+    - Fixed user listing screen ui + bugs
+    - made posted user clickable to view their other listings
+    - Added link to view haulers + added screen for it
+    - Added 'you may also like..' recommendations

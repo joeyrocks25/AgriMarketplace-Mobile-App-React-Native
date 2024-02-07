@@ -1,5 +1,14 @@
 import React from "react";
-import { Alert, Keyboard, View, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  Alert,
+  Keyboard,
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -7,12 +16,12 @@ import messagesApi from "../api/messages";
 import colors from "../config/colors";
 
 function ContactSellerForm({ listing }) {
-  console.log("listinggg", listing)
+  console.log("listinggg", listing);
   const handleSend = async ({ message }, { resetForm }) => {
     Keyboard.dismiss();
 
     console.log("message is", message);
-    console.log("listing id is", listing.id)
+    console.log("listing id is", listing.id);
     const result = await messagesApi.send(message, listing.id);
     console.log("result is", result);
 
@@ -68,7 +77,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     paddingHorizontal: 10,
-    paddingBottom: 10,  // Adjusted paddingBottom
+    paddingBottom: 10, // Adjusted paddingBottom
     paddingTop: 15,
     borderTopWidth: 1,
     borderTopColor: colors.test2,
@@ -76,10 +85,11 @@ const styles = StyleSheet.create({
   messageContainerWrapper: {
     flexDirection: "row",
     alignItems: "flex-end",
-    justifyContent: 'flex-start',
-    width: '100%',
-    marginBottom: 40,  // Added marginBottom
+    justifyContent: "flex-start",
+    width: "100%",
+    marginBottom: Platform.OS === "ios" ? 30 : 5,
   },
+
   messageContainer: {
     flex: 1,
     backgroundColor: colors.white,

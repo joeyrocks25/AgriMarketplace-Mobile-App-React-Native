@@ -58,7 +58,7 @@ function RegisterScreen() {
 
     await registerApi.request(userData);
 
-    console.log("email",email, "password", password)
+    console.log("email", email, "password", password);
     const { data: authToken } = await loginApi.request(email, password);
     auth.logIn(authToken);
   };

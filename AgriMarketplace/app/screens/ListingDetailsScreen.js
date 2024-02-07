@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Image as RNImage,
+  KeyboardAvoidingView,
 } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { Image as ExpoImage } from "react-native-expo-image-cache";
@@ -203,7 +204,10 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
       <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         <ExpoImage
           style={styles.image}
@@ -353,10 +357,10 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
         <ContactSellerForm
           listing={item}
           visible={formVisible}
-          onClose={() => setFormVisible(false)}
+          // onClose={() => setFormVisible(true)}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

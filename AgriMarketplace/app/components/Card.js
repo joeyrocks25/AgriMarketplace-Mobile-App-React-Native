@@ -21,7 +21,8 @@ function Card({
   isFavorite,
   onFavoritePress, // Receive favorite press handler
 }) {
-  const cardWidth = Dimensions.get("window").width - (Platform.OS === "android" ? 80 : 40);
+  const cardWidth =
+    Dimensions.get("window").width - (Platform.OS === "android" ? 80 : 40);
   const shadowWidth = cardWidth;
 
   const shadowOpt = {

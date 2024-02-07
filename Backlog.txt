@@ -15,7 +15,6 @@
 - Advertisements?
 - Reviews/feedback system?
 - Possibly filtering?
-- hauler recommendation screens
 - Add jwt token auth for endpoints
 - tidy endpoints
 - User listings & favourites navigation fix
@@ -25,7 +24,6 @@
 Value vs effort matrix
 
 Quick wins:
-- hauler recommendation screens
 
 Fill-ins:
 - Add multiple images that are swipable for listing or view more
