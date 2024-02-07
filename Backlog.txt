@@ -1,6 +1,5 @@
 (Backlog) To do:
-- Make listing user clickable to view their profile and other listings
-- View listings by location nearest
+- Algorithm for view listings order
 - Ensure logged in user can't view 
 - Add multiple images that are swipable for listing or view more
 - edit/delete profile
@@ -13,11 +12,9 @@
 - Azure cloud infrastructure backend
 - content moderator for azure blob images
 - Accessibility features?
-- Could improve search with algorithm or some sort of machine learning/ai 
 - Advertisements?
 - Reviews/feedback system?
 - Possibly filtering?
-- Possible recommendations for haulers if view livestock - pay for hauler advertisements area based?
 - Add jwt token auth for endpoints
 - tidy endpoints
 - User listings & favourites navigation fix
@@ -27,14 +24,12 @@
 Value vs effort matrix
 
 Quick wins:
-- Recommendations for haulers if view livestock and improve listingdetailsscreen
-- Make listing user clickable to view their profile and other listings
 
 Fill-ins:
 - Add multiple images that are swipable for listing or view more
 - Timer for listing posted
 - Setup Card payment system for ads
-- View listings by location nearest
+- Algorithm for view listings order
 - User listings & favourites navigation fix
 - User listings & favourites card rework + delete favourite
 - Show if message read or not
@@ -53,7 +48,6 @@ Major projects:
 
 Long-term projects:
 - content moderator for azure blob images
-- Could improve search with algorithm or some sort of machine learning/ai
 - Reviews/feedback system?
 - Possibly filtering?
 
