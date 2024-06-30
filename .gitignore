@@ -8,3 +8,10 @@ chatbot/.rasa
 
 # chatbot models
 chatbot/models
+
+# Test data assets
+assets
+
+# node modules
+
+node_modules

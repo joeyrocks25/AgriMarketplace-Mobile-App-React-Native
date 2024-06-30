@@ -33,3 +33,4 @@
     - made posted user clickable to view their other listings
     - Added link to view haulers + added screen for it
     - Added 'you may also like..' recommendations
+17. Cleanup
