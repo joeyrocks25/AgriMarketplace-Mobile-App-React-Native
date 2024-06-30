@@ -16,3 +16,5 @@
 - **Haulage Advertisements**: Offers a platform for posting and finding haulage services.
 - **Favouriting**: Allows users to save listings for later viewing.
 - **Azure Cloud Scalability**: Resources have since been spun down.
+
+- See snippets of the app - https://www.linkedin.com/in/kevin-patrick-cunningham-86665627b/overlay/1719412469826/single-media-viewer/?profileId=ACoAAERC-k4BllMWaFqLd0Lz1QBtBls-G8XbLmg
