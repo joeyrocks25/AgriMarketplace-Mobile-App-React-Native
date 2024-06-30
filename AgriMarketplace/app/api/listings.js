@@ -1,15 +1,12 @@
 import client from "./client";
 
 const endpoint = "/listings";
-
 const endpoint2 = "/listing";
 
 const getListingById = async (id) => {
   try {
-    // console.log("test id", id);
     const fullEndpoint = client.getBaseURL() + endpoint2 + `/${id}`;
-    console.log("API Endpointttt:", fullEndpoint); // Log the endpoint
-
+    console.log("Get Listing by ID API Endpoint:", fullEndpoint); // Log the endpoint
     const response = await client.get(fullEndpoint);
     return response;
   } catch (error) {
@@ -20,7 +17,7 @@ const getListingById = async (id) => {
 
 const addListing = async (listing) => {
   const fullEndpoint = client.getBaseURL() + endpoint;
-  console.log("API Endpoint:", fullEndpoint);
+  console.log("Add Listing API Endpoint:", fullEndpoint); // Log the endpoint
 
   try {
     const response = await fetch(fullEndpoint, {
@@ -48,7 +45,6 @@ const addListing = async (listing) => {
 
 const getListings = async (userId, categoryId) => {
   try {
-    
     const parsedCategoryId = categoryId ? parseInt(categoryId, 10) : null;
 
     let queryString = "";
@@ -68,7 +64,7 @@ const getListings = async (userId, categoryId) => {
       client.getBaseURL() +
       endpoint +
       (queryString !== "" ? `?${queryString}` : "");
-    console.log("API Endpoint:", fullEndpoint); // Log the endpoint
+    console.log("Get Listings API Endpoint:", fullEndpoint); // Log the endpoint
 
     const response = await client.get(fullEndpoint);
     return response;
@@ -87,7 +83,7 @@ const getListingsBySearch = async (searchText) => {
     const fullEndpoint =
       client.getBaseURL() + endpoint + "/search?searchText=" + searchText;
 
-    console.log("API Endpoint:", fullEndpoint);
+    console.log("Get Listings by Search API Endpoint:", fullEndpoint); // Log the endpoint
 
     const response = await client.get(fullEndpoint);
     const searchResults = response.data; // Extract the search results from the response
@@ -104,7 +100,7 @@ const getListingsBySearch = async (searchText) => {
 const deleteListingById = async (listingId) => {
   try {
     const fullEndpoint = client.getBaseURL() + endpoint + `/${listingId}`;
-    console.log("API Endpoint for deletion:", fullEndpoint);
+    console.log("Delete Listing by ID API Endpoint:", fullEndpoint); // Log the endpoint
 
     const response = await client.delete(fullEndpoint);
 

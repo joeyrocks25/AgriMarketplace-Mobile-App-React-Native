@@ -1,8 +1,6 @@
 import React from "react";
 
 const DistanceCalculator = ({ location1, location2 }) => {
-  // console.log("Test1:", location1);
-  // console.log("Test2:", location2);
   // Function to calculate the distance between two locations
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Radius of the Earth in kilometers

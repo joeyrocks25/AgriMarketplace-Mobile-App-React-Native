@@ -8,7 +8,7 @@ const auth = require("../middleware/auth");
 const { isFavouriteAlreadyExists } = require("../store/favourites");
 
 // Define the route handler for creating a new favourite
-router.post("/", auth, (req, res) => {
+router.post("/add", auth, (req, res) => {
   const { currentUserId, listingId } = req.body;
 
   // Validate the request body
@@ -58,6 +58,21 @@ router.get("/", auth, (req, res) => {
   }
 
   res.send(filteredFavourites);
+});
+
+// Define the route handler for deleting a favourite by ID
+router.delete("/:id", auth, (req, res) => {
+  const { id } = req.params;
+
+  const favourite = store.getFavourite(id);
+  if (!favourite) {
+    return res.status(404).send({ error: "Favourite not found." });
+  }
+
+  // Delete the favourite from the store
+  store.deleteFavourite(id);
+
+  res.status(200).send({ message: "Favourite deleted successfully." });
 });
 
 module.exports = router;

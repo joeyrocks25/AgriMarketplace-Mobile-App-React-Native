@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 100,
     borderWidth: 0.5,
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
   },
   image: {
     height: "100%",

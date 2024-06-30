@@ -2,73 +2,190 @@ import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
+import { TouchableOpacity, View, Platform } from "react-native"; // Import TouchableOpacity
 import CategorySelectScreen from "../screens/CategorySelectScreen";
 import ListingsScreen from "../screens/ListingsScreen";
 import ListingDetailsScreen from "../screens/ListingDetailsScreen";
 import ListingEditScreen from "../screens/ListingEditScreen";
 import SellerDetailsScreen from "../screens/SellerDetailsScreen";
 import MessagesScreen from "../screens/MessagesScreen";
-import MessagesConversation from "../screens/MessagesConversation"; // Import the MessagesConversation component
+import MessagesConversation from "../screens/MessagesConversation";
 import HaulersScreen from "../screens/HaulersScreen";
 import SearchBarScreen from "../screens/SearchBarScreen";
 import AccountNavigator from "./AccountNavigator";
 import NewListingButton from "./NewListingButton";
 import routes from "./routes";
 import useNotifications from "../hooks/useNotifications";
-import { useIsFocused } from "@react-navigation/native";
+import CustomAvatar from "../components/CustomAvatar";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const HomeStack = ({ setShowTabBar }) => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Category" component={CategorySelectScreen} />
-    <Stack.Screen name="Listings" component={ListingsScreen} />
-    <Stack.Screen name="ListingDetails">
-      {(props) => (
-        <ListingDetailsScreen
-          {...props}
-          onScreenFocus={(isFocused) => {
-            console.log("ListingDetailsScreennn is focused:", isFocused);
-            setShowTabBar(!isFocused);
-          }}
-          isFocused={props.navigation.isFocused()}
-        />
-      )}
-    </Stack.Screen>
-    <Stack.Screen name="Seller Details">
-      {(props) => (
-        <SellerDetailsScreen
-          {...props}
-          onScreenFocus={(isFocused) => {
-            console.log("SellerDetailsScreennnn is focused:", isFocused);
-            setShowTabBar(!isFocused);
-          }}
-          isFocused={props.navigation.isFocused()}
-        />
-      )}
-    </Stack.Screen>
-    <Stack.Screen name="Haulers">
-      {(props) => (
-        <HaulersScreen
-          {...props}
-          onScreenFocus={(isFocused) => {
-            console.log("Haulers Screennnn is focused:", isFocused);
-            setShowTabBar(!isFocused);
-          }}
-          isFocused={props.navigation.isFocused()}
-        />
-      )}
-    </Stack.Screen>
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Category"
+      component={CategorySelectScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Listings"
+      component={ListingsScreen}
+      options={({ navigation }) => ({
+        title: "Category Selector",
+        headerShown: true,
+        headerBackTitle: "Back", // Customize the back button text
+        headerBackTitleVisible: true,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialCommunityIcons
+              name="keyboard-backspace"
+              size={28}
+              color="black"
+              style={{ marginLeft: 10 }}
+            />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor: "white", // Customize the header background color
+        },
+      })}
+    />
+    <Stack.Screen
+      name="ListingDetails"
+      component={ListingDetailsScreen}
+      options={({ navigation }) => ({
+        title: "View Listings",
+        headerShown: true,
+        headerBackTitle: "Back", // Customize the back button text
+        headerBackTitleVisible: true,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialCommunityIcons
+              name="keyboard-backspace"
+              size={28}
+              color="black"
+              style={{ marginLeft: 10 }}
+            />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor: "white", // Customize the header background color
+        },
+      })}
+    />
+    <Stack.Screen
+      name="Seller Details"
+      component={SellerDetailsScreen}
+      options={({ navigation }) => ({
+        title: "Seller Details",
+        headerShown: true,
+        headerBackTitle: "Back", // Customize the back button text
+        headerBackTitleVisible: true,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialCommunityIcons
+              name="arrow-left"
+              size={24}
+              color="black"
+              style={{ marginLeft: 10 }}
+            />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor: "white", // Customize the header background color
+        },
+      })}
+    />
+    <Stack.Screen
+      name="Haulers"
+      component={HaulersScreen}
+      options={({ navigation }) => ({
+        title: "View Listing",
+        headerShown: true,
+        headerBackTitle: "Back", // Customize the back button text
+        headerBackTitleVisible: true,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialCommunityIcons
+              name="arrow-left"
+              size={24}
+              color="black"
+              style={{ marginLeft: 10 }}
+            />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor: "white",
+        },
+      })}
+    />
   </Stack.Navigator>
 );
 
 const MessagesStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Messages" component={MessagesScreen} />
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Messages"
+      component={MessagesScreen}
+      options={{ headerShown: false }}
+    />
     <Stack.Screen
       name={routes.MESSAGES_CONVERSATION}
       component={MessagesConversation}
+      // Inside the options of MessagesStack
+      // Inside the options of MessagesStack
+      // Inside the options of MessagesStack
+      options={({ navigation, route }) => {
+        const { otherUser } = route;
+        console.log("profile image is", route.params.profileImage);
+        console.log("username is", route.params.name);
+
+        return {
+          title: "", // Set an empty title
+          headerShown: true,
+          headerBackTitle: "Back", // Customize the back button text
+          headerBackTitleVisible: true,
+          headerTitleAlign: "center", // Align the header title to center
+
+          headerLeft: () => (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginLeft: 10,
+                justifyContent: "flex-start",
+              }}
+            >
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <MaterialCommunityIcons
+                  name="arrow-left"
+                  size={24}
+                  color="black"
+                />
+              </TouchableOpacity>
+
+              {/* Wrap the custom avatar in another view */}
+              <View style={{ marginLeft: 10 }}>
+                {/* Render the custom avatar here */}
+                {route && (
+                  <CustomAvatar
+                    imageUri={route.params.profileImage}
+                    name={route.params.name}
+                    size={40} // Adjust the size as needed
+                    style={{ marginLeft: 10 }}
+                  />
+                )}
+              </View>
+            </View>
+          ),
+
+          headerStyle: {
+            backgroundColor: "orange", // Customize the header background color
+            height: Platform.OS === "android" ? 60 : 110,
+          },
+        };
+      }}
     />
   </Stack.Navigator>
 );
@@ -109,7 +226,7 @@ const AppNavigator = () => {
       </Tab.Screen>
 
       <Tab.Screen
-        name="Search"
+        name="Search for Listings"
         component={SearchBarScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -127,7 +244,7 @@ const AppNavigator = () => {
       />
 
       <Tab.Screen
-        name="Post an ad"
+        name="Post a Listing"
         component={ListingEditScreen}
         options={({ navigation }) => ({
           tabBarButton: () => (
@@ -153,7 +270,7 @@ const AppNavigator = () => {
       />
       <Tab.Screen
         name="Messages"
-        component={MessagesStack} // Use the MessagesStack component
+        component={MessagesStack}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -170,6 +287,7 @@ const AppNavigator = () => {
             null,
           ],
           tabBarLabel: "Messages",
+          headerShown: false,
         }}
       />
 

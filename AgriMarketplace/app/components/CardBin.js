@@ -1,18 +1,44 @@
 import React from "react";
-import { View, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Text from "./Text";
 import colors from "../config/colors";
-import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import listingsApi from "../api/listings";
+import favouritesApi from "../api/favourites";
 
-const Card = ({ title, subTitle, imageUrl, onPress, customHeight, distance, listingId, onDelete }) => {
+const CardBin = ({
+  title,
+  subTitle,
+  imageUrl,
+  onPress,
+  customHeight,
+  distance,
+  listingId,
+  iconName,
+  favouriteId,
+  setRefreshKey,
+}) => {
   const handleDeletePress = async () => {
     try {
-      await listingsApi.deleteListingById(listingId);
-      console.log("Listing deleted successfully!");
-      onDelete();
+      if (iconName === "heart") {
+        await favouritesApi.deleteFavouriteById(favouriteId);
+        console.log("Favourite deleted successfully!");
+        // Call onDelete after successfully deleting the favourite
+        setRefreshKey((prevKey) => prevKey + 1);
+      } else {
+        // Delete the listing
+        await listingsApi.deleteListingById(listingId);
+        console.log("listingid", listingId);
+        console.log("Listing deleted successfully!");
+        setRefreshKey((prevKey) => prevKey + 1);
+      }
     } catch (error) {
-      console.error("Error deleting listing:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -23,6 +49,27 @@ const Card = ({ title, subTitle, imageUrl, onPress, customHeight, distance, list
           style={[styles.image, { height: customHeight }]}
           source={{ uri: imageUrl }}
         />
+        <View style={styles.iconContainer}>
+          <TouchableWithoutFeedback onPress={handleDeletePress}>
+            <View style={styles.iconButton}>
+              {iconName === "heart" ? (
+                <AntDesign
+                  name="heart"
+                  size={24}
+                  color={colors.red}
+                  style={styles.deleteIcon}
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="delete"
+                  size={24}
+                  color={colors.red}
+                  style={styles.deleteIcon}
+                />
+              )}
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
         <View style={styles.detailsContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.title} numberOfLines={1}>
@@ -30,7 +77,7 @@ const Card = ({ title, subTitle, imageUrl, onPress, customHeight, distance, list
             </Text>
             {distance && (
               <View style={styles.locationContainer}>
-                <FontAwesome name="map-marker" size={20} color="red" />
+                <AntDesign name="heart" size={20} color={colors.red} />
                 <Text style={styles.distance}>{distance} miles away</Text>
               </View>
             )}
@@ -39,22 +86,12 @@ const Card = ({ title, subTitle, imageUrl, onPress, customHeight, distance, list
             <Text style={styles.subTitle} numberOfLines={2}>
               {subTitle}
             </Text>
-            <TouchableWithoutFeedback onPress={handleDeletePress}>
-              <View style={styles.deleteButton}>
-                <AntDesign
-                  name="delete"
-                  size={28}
-                  color={colors.red}
-                  style={styles.deleteIcon}
-                />
-              </View>
-            </TouchableWithoutFeedback>
           </View>
         </View>
       </View>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   card: {
@@ -62,7 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     marginBottom: 20,
     overflow: "hidden",
-    height: 300,
+    position: "relative",
   },
   detailsContainer: {
     padding: 20,
@@ -98,19 +135,27 @@ const styles = StyleSheet.create({
   distance: {
     marginLeft: 5,
   },
-  deleteButton: {
+  iconContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    flexDirection: "row",
+  },
+  iconButton: {
     backgroundColor: colors.white,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 38,
+    height: 38,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
     borderColor: colors.white,
+    marginLeft: 10,
+    zIndex: 1, // Ensure icon is above the image
   },
   deleteIcon: {
-    marginLeft: 2,
+    marginLeft: 1,
   },
 });
 
-export default Card;
+export default CardBin;

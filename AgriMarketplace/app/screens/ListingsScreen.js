@@ -5,6 +5,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 import Card from "../components/Card";
@@ -20,17 +21,23 @@ import DistanceCalculator from "../components/DistanceCalculator";
 import { BoxShadow } from "react-native-shadow";
 import useAuth from "../auth/useAuth";
 import favouritesApi from "../api/favourites";
-import { Platform } from "react-native";
 
 function ListingsScreen({ navigation }) {
   console.log("navaaa", navigation);
+
+  // Hook to retrieve route parameters
   const route = useRoute();
+
+  // Hook to get current location
   const location = useLocation();
+
+  // Extracting category details from route parameters
   const categoryId = route.params?.categoryId;
   const categoryColor = route.params?.categoryColor;
   const categoryName = route.params?.categoryName;
   const { user } = useAuth();
 
+  // Calculating user's location
   let userLocation = null;
   if (location) {
     userLocation = {
@@ -41,6 +48,7 @@ function ListingsScreen({ navigation }) {
     console.log("Location is not available");
   }
 
+  // Shadow options for category name
   const categoryNameShadowOpt = {
     width:
       Platform.OS === "ios"
@@ -56,6 +64,7 @@ function ListingsScreen({ navigation }) {
     style: { marginVertical: 10 },
   };
 
+  // API hook to fetch listings
   const getListingsApi = useApi(() =>
     listingsApi.getListings(null, categoryId)
   );
@@ -64,8 +73,10 @@ function ListingsScreen({ navigation }) {
     getListingsApi.request();
   }, [categoryId]);
 
+  // State for favorites
   const [favorites, setFavorites] = useState([]);
 
+  // Function to handle adding favorites
   const handleFavoritePress = async (listing) => {
     try {
       if (!listing.isButtonDisabled) {
@@ -93,6 +104,7 @@ function ListingsScreen({ navigation }) {
     }
   };
 
+  // Render component
   return (
     <Screen style={styles.screen}>
       <BoxShadow setting={categoryNameShadowOpt}>
@@ -129,12 +141,26 @@ function ListingsScreen({ navigation }) {
               return (
                 <Card
                   title={item.title}
-                  subTitle={"£" + item.price}
+                  subTitle={
+                    <AppText style={styles.price}>
+                      <MaterialCommunityIcons
+                        name="currency-gbp"
+                        size={18}
+                        color={colors.dark_green}
+                      />
+                      {item.price}
+                    </AppText>
+                  }
                   imageUrl={item.images[0].url}
                   customHeight={200}
-                  onPress={() =>
-                    navigation.navigate(routes.LISTING_DETAILS, { item })
-                  }
+                  onPress={() => {
+                    // Log the item before navigating
+                    console.log(
+                      "Navigating to listing details:",
+                      item.images[0].url
+                    );
+                    navigation.navigate(routes.LISTING_DETAILS, { item });
+                  }}
                   distance={distance}
                   isFavorite={favorites.some((fav) => fav.id === item.id)}
                   onFavoritePress={() => handleFavoritePress(item)}
@@ -168,8 +194,7 @@ const styles = StyleSheet.create({
     maxWidth:
       Platform.OS === "ios"
         ? Dimensions.get("window").width - 10
-        : Dimensions.get("window").width - 80, // Set a different maxWidth for iOS
-    // alignSelf: "center", // Center the categoryHUD
+        : Dimensions.get("window").width - 80,
   },
   checkIcon: {
     marginRight: 10,

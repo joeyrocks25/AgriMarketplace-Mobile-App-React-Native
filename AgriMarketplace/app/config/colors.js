@@ -19,5 +19,5 @@ export default {
   tools: "#2bcbba",
   other: "#778ca3",
   test: "#F5F5F5",
-  test2: "#D3D3D3",
+  grey_border: "#D3D3D3",
 };

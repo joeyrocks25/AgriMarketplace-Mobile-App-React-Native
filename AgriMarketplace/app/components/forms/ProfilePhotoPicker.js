@@ -47,7 +47,7 @@ function ProfilePhotoPicker({ name, initialImage }) {
             <Image source={{ uri: imageUri }} style={styles.image} />
             <MaterialCommunityIcons
               name="close-circle"
-              size={45}
+              size={35}
               color={colors.danger}
               style={styles.removeIcon}
               onPress={handleRemoveImage}
@@ -63,7 +63,10 @@ function ProfilePhotoPicker({ name, initialImage }) {
           </TouchableOpacity>
         )}
       </View>
-      <ErrorMessage error={errors && errors[name]} visible={touched && touched[name]} />
+      <ErrorMessage
+        error={errors && errors[name]}
+        visible={touched && touched[name]}
+      />
     </>
   );
 }
@@ -73,8 +76,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
-    width: 180,
-    height: 180,
+    width: 150,
+    height: 150,
     borderRadius: 80,
     backgroundColor: colors.light_gray,
   },

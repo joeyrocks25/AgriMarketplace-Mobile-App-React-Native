@@ -1,6 +1,6 @@
 export default Object.freeze({
   LISTING_DETAILS: "ListingDetails",
-  LISTING_EDIT: "Post an ad",
+  LISTING_EDIT: "Post a Listing",
   LOGIN: "Login",
   MESSAGES: "Messages",
   REGISTER: "Register",

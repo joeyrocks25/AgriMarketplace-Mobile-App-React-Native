@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-
 import ActivityIndicator from "../components/ActivityIndicator";
 import Button from "../components/Button";
 import CardBin from "../components/CardBin";
@@ -11,27 +10,44 @@ import Screen from "../components/Screen";
 import AppText from "../components/Text";
 import useApi from "../hooks/useApi";
 import useAuth from "../auth/useAuth";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+// User Favourites Screen component
 function UserFavouritesScreen({ navigation }) {
+  // Get authenticated user
   const { user } = useAuth();
 
+  // State to trigger refresh of favourites
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // API hook to fetch user favourites
   const getFavouritesApi = useApi(() =>
     favouritesApi.getFavourites(user.userId)
   );
 
+  // Fetch user favourites on component mount and refreshKey change
   useEffect(() => {
     getFavouritesApi.request();
-  }, []);
+  }, [refreshKey]);
 
-  console.log("Favourites:", getFavouritesApi.data); // Log the favourites data
+  // Handler to delete favourite
+  const handleDeleteFavourite = async (favouriteId) => {
+    try {
+      await favouritesApi.deleteFavourite(favouriteId);
+      console.log("Favourite deleted successfully!");
+      setRefreshKey((prevKey) => prevKey + 1); // Refresh the favourites data
+    } catch (error) {
+      console.error("Error deleting favourite:", error);
+    }
+  };
 
   return (
     <Screen style={styles.screen}>
+      {/* Show loading indicator while fetching favourites */}
       {getFavouritesApi.loading ? (
         <ActivityIndicator visible={true} />
       ) : (
         <>
+          {/* FlatList to render user favourites */}
           <FlatList
             numColumns={2}
             data={getFavouritesApi.data}
@@ -43,16 +59,19 @@ function UserFavouritesScreen({ navigation }) {
                   subTitle={"£" + item.price}
                   subTitleStyle={styles.price}
                   imageUrl={item.images[0].url}
-                  customHeight={200} // Adjust the height based on your requirements
-                  style={styles.card}
+                  customHeight={200}
                   onPress={() =>
                     navigation.navigate(routes.LISTING_DETAILS, item)
                   }
+                  iconName="heart" // Specify the icon to display
+                  favouriteId={item.id}
+                  setRefreshKey={setRefreshKey}
                 />
               </View>
             )}
           />
 
+          {/* Show error message and retry button if fetching favourites fails */}
           {getFavouritesApi.error && (
             <View style={styles.errorContainer}>
               <AppText style={styles.errorText}>
@@ -93,9 +112,6 @@ const styles = StyleSheet.create({
   },
   price: {
     color: colors.dark_green,
-  },
-  card: {
-    height: 125,
   },
 });
 

@@ -11,7 +11,7 @@ const schema = Joi.object({
 });
 
 // POST /api/auth
-router.post("/", (req, res) => {
+router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   // Find the user by email
@@ -20,7 +20,8 @@ router.post("/", (req, res) => {
     return res.status(400).send({ error: "Invalid email or password." });
   }
 
-  const defaultProfileImage = "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg";
+  const defaultProfileImage =
+    "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg";
 
   // Use the default profile image if user doesn't have one
   const profileImage = user.profileImage || defaultProfileImage;

@@ -7,23 +7,46 @@ import {
   Button,
   Text,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import messagesApi from "../api/messages";
+import usersApi from "../api/users";
 import useAuth from "../auth/useAuth";
+import CustomAvatar from "../components/CustomAvatar";
+import { useNavigation } from "@react-navigation/native";
 
 function MessagesConversation() {
-  const route = useRoute();
-  const { conversation } = route.params;
-  const conversationId = conversation.lastMessage.conversationId;
-  const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const { user } = useAuth();
+  const route = useRoute(); // Get the route object
+  const { conversation } = route.params; // Extract conversation from route params
+  const conversationId = conversation.lastMessage.conversationId; // Get conversation ID
+  const [newMessage, setNewMessage] = useState(""); // State for new message input
+  const [messages, setMessages] = useState([]); // State for messages
+  const [otherUserID, setOtherUserID] = useState(null); // State for other user ID
+  const [otherUser, setOtherUser] = useState(null); // State for other user details
+  const { user } = useAuth(); // Get user object from useAuth hook
+  const navigation = useNavigation(); // Get navigation object
 
+  // Load messages and other user details when component mounts or otherUserID changes
   useEffect(() => {
     loadMessages();
-  }, []);
 
+    const fetchUser = async () => {
+      try {
+        if (otherUserID) {
+          const response = await usersApi.getUser(otherUserID);
+          setOtherUser(response.data); // Set otherUser state with fetched user details
+          navigation.setParams(response.data); // Set navigation params with other user details
+        }
+      } catch (error) {
+        console.log("Error fetching user:", error);
+      }
+    };
+
+    fetchUser();
+  }, [otherUserID]);
+
+  // Function to load messages
   const loadMessages = async () => {
     try {
       if (!conversationId) {
@@ -36,42 +59,46 @@ function MessagesConversation() {
         conversationId
       );
 
-      console.log("ok", response.data);
-      console.log("user", user.userId);
+      const currentUserID = user.userId;
 
-      // Reverse the order of messages before setting in the state
-      setMessages(response.data.reverse());
+      // Determine the other user's ID
+      for (const message of response.data) {
+        if (message.fromUserId !== currentUserID) {
+          setOtherUserID(message.fromUserId);
+          break;
+        }
+
+        if (message.toUserId !== currentUserID) {
+          setOtherUserID(message.toUserId);
+          break;
+        }
+      }
+
+      setMessages(response.data.reverse()); // Set messages state with fetched messages
     } catch (error) {
       console.log("Error loading messages:", error);
     }
   };
 
+  // Function to handle sending a reply message
   const handleSendReply = async () => {
     try {
       if (!newMessage.trim()) {
-        // Don't send an empty message
         return;
       }
 
-      // Send the new reply message to the server using sendReplyToConversation
-      try {
-        await messagesApi.sendReplyToConversation(
-          user.token,
-          conversationId,
-          newMessage,
-          conversation.lastMessage.listingId
-        );
+      // Send the new reply message to the server
+      await messagesApi.sendReplyToConversation(
+        user.token,
+        conversationId,
+        newMessage,
+        conversation.lastMessage.listingId
+      );
 
-        console.log("test");
+      setNewMessage(""); // Clear the new message input
 
-        // Clear the input field
-        setNewMessage("");
-
-        // Refresh messages by calling loadMessages again
-        loadMessages();
-      } catch (error) {
-        console.log("Error sending reply:", error);
-      }
+      // Refresh messages by loading them again
+      loadMessages();
     } catch (error) {
       console.log("Error sending reply:", error);
     }
@@ -81,7 +108,10 @@ function MessagesConversation() {
     <KeyboardAvoidingView
       style={styles.container}
       behavior="padding"
-      keyboardVerticalOffset={Platform.select({ ios: 80, android: -500 })}
+      keyboardVerticalOffset={Platform.select({
+        ios: 110,
+        android: -500,
+      })}
     >
       <FlatList
         data={messages}
@@ -90,8 +120,11 @@ function MessagesConversation() {
           <View
             style={[
               styles.messageContainer,
+              {
+                paddingHorizontal: 10,
+              },
               item.fromUserId === user.userId
-                ? styles.receivedMessageContainer // Swap sent and received styles for the current user
+                ? styles.receivedMessageContainer
                 : styles.sentMessageContainer,
             ]}
           >
@@ -99,7 +132,7 @@ function MessagesConversation() {
               style={[
                 styles.messageBubble,
                 item.fromUserId === user.userId
-                  ? styles.receivedBubble // Swap sent and received styles for the current user
+                  ? styles.receivedBubble
                   : styles.sentBubble,
               ]}
             >
@@ -126,7 +159,6 @@ function MessagesConversation() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
   },
   inputContainer: {
     flexDirection: "row",
@@ -150,11 +182,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   sentBubble: {
-    alignSelf: "flex-start", // Align sent messages to the left
+    alignSelf: "flex-start",
     backgroundColor: "#DCF8C6",
   },
   receivedBubble: {
-    alignSelf: "flex-end", // Align received messages to the right
+    alignSelf: "flex-end",
     backgroundColor: "#F3F3F3",
   },
 });

@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start", // Adjusted justification
     borderBottomWidth: 1,
-    borderBottomColor: colors.test2,
+    borderBottomColor: colors.grey_border,
     backgroundColor: colors.middle_orange,
     paddingTop: 10,
     paddingLeft: 10,

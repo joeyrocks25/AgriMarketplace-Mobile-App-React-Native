@@ -1,14 +1,23 @@
 import client from "./client";
 
-const login = (email, password) => client.post("/auth", { email, password });
+const login = (email, password) => {
+  const endpoint = "/auth/login";
+  const fullEndpoint = client.getBaseURL() + endpoint;
+  console.log("Login API Endpoint:", fullEndpoint); // Log the endpoint
+  return client.post(endpoint, { email, password });
+};
 
-// test
-const getMessages = (authToken) =>
-  client.get("/messages", {
+// add this to users???
+const getMessages = (authToken) => {
+  const endpoint = "/messages";
+  const fullEndpoint = client.getBaseURL() + endpoint;
+  console.log("Get Messages API Endpoint:", fullEndpoint); // Log the endpoint
+  return client.get(endpoint, {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
   });
+};
 
 export default {
   login,

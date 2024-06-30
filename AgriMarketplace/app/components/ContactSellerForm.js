@@ -15,8 +15,9 @@ import * as Yup from "yup";
 import messagesApi from "../api/messages";
 import colors from "../config/colors";
 
+// ContactSellerForm component
 function ContactSellerForm({ listing }) {
-  console.log("listinggg", listing);
+  // Method to handle sending the message
   const handleSend = async ({ message }, { resetForm }) => {
     Keyboard.dismiss();
 
@@ -42,10 +43,7 @@ function ContactSellerForm({ listing }) {
       validationSchema={validationSchema}
     >
       {({ handleChange, handleBlur, handleSubmit, values }) => (
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
-        >
+        <View style={styles.container}>
           <View style={styles.messageContainerWrapper}>
             <View style={styles.messageContainer}>
               <TextInput
@@ -62,40 +60,41 @@ function ContactSellerForm({ listing }) {
               <FontAwesome name="send" size={24} color={colors.white} />
             </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
+        </View>
       )}
     </Formik>
   );
 }
 
+// Validation schema for the message field
 const validationSchema = Yup.object().shape({
   message: Yup.string().required().min(1).label("Message"),
 });
 
+// Styles for the ContactSellerForm component
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "flex-end",
     paddingHorizontal: 10,
-    paddingBottom: 10, // Adjusted paddingBottom
+    paddingBottom: 10,
     paddingTop: 15,
     borderTopWidth: 1,
-    borderTopColor: colors.test2,
+    borderTopColor: colors.grey_border,
   },
   messageContainerWrapper: {
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "flex-start",
     width: "100%",
-    marginBottom: Platform.OS === "ios" ? 30 : 5,
+    marginBottom: Platform.OS === "ios" ? 30 : "5%",
   },
-
   messageContainer: {
     flex: 1,
     backgroundColor: colors.white,
     padding: 10,
     borderWidth: 1,
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
     height: 45,
     marginRight: 10,
     borderRadius: 10,

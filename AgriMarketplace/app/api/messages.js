@@ -2,13 +2,15 @@ import client from "./client";
 
 const getConversations = async (authToken) => {
   try {
+    const endpoint = "/messages";
     console.log("Calling getConversations API with authToken:", authToken);
-    const response = await client.get("/messages", {
+    console.log("get messages Endpoint:", endpoint);
+    const response = await client.get(endpoint, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
     });
-    console.log("getConversations response:", response.data);
+    console.log("Get Conversations response:", response.data); // Log the response
     return response;
   } catch (error) {
     console.log("Error in getConversations API:", error);
@@ -28,7 +30,7 @@ const getMessagesForConversation = async (authToken, conversationId) => {
         Authorization: `Bearer ${authToken}`,
       },
     });
-    console.log("getMessagesForConversation response:", response.data);
+    console.log("Get Messages for Conversation response:", response.data); // Log the response
     return response;
   } catch (error) {
     console.log("Error in getMessagesForConversation API:", error);
@@ -40,11 +42,18 @@ const send = async (message, listingId) => {
   try {
     console.log("Calling send API with message:", message);
     console.log("Listing ID:", listingId);
-    const response = await client.post("/messages", {
+
+    const endpoint = "/messages";
+    const payload = {
       message,
       listingId,
-    });
-    console.log("send response:", response.data);
+    };
+
+    console.log("Endpoint:", endpoint);
+    console.log("Payload:", payload);
+
+    const response = await client.post(endpoint, payload);
+    console.log("Send response:", response.data); // Log the response
     return response;
   } catch (error) {
     console.log("Error in send API:", error);
@@ -76,29 +85,13 @@ const sendReplyToConversation = async (
         },
       }
     );
-    console.log("sendReplyToConversation response:", response.data);
+    console.log("Send Reply to Conversation response:", response.data); // Log the response
     return response;
   } catch (error) {
     console.log("Error in sendReplyToConversation API:", error);
     throw error;
   }
 };
-
-// const sendToConversation = async (conversationId, message, listingId) => {
-//   try {
-//     console.log("Calling sendToConversation API with message:", message);
-//     console.log("Conversation ID:", conversationId);
-//     const response = await client.post(`/messages/${conversationId}`, {
-//       message,
-//       listingId,
-//     });
-//     console.log("sendToConversation response:", response.data);
-//     return response;
-//   } catch (error) {
-//     console.log("Error in sendToConversation API:", error);
-//     throw error;
-//   }
-// };
 
 export default {
   getConversations,

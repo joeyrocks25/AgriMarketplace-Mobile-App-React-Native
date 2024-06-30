@@ -114,6 +114,97 @@ router.post("/", async (req, res) => {
   res.status(201).send(resource);
 });
 
+// New route handler for updating a listing by ID
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { title, price, categoryId, description, images, location } = req.body;
+
+  const listingId = parseInt(id);
+  if (isNaN(listingId) || listingId <= 0) {
+    return res.status(400).send({ error: "Invalid listing ID." });
+  }
+
+  const listingIndex = store
+    .getListings()
+    .findIndex((item) => item.id === listingId);
+  if (listingIndex === -1) {
+    return res.status(404).send({ error: "Listing not found." });
+  }
+
+  const listing = store.getListings()[listingIndex];
+
+  if (title) {
+    listing.title = title;
+  }
+  if (price) {
+    listing.price = parseFloat(price);
+  }
+  if (categoryId) {
+    const categoryIdInt = parseInt(categoryId);
+    if (!categoriesStore.getCategory(categoryIdInt)) {
+      return res.status(400).send({ error: "Invalid categoryId." });
+    }
+    listing.categoryId = categoryIdInt;
+  }
+  if (description) {
+    listing.description = description;
+  }
+  if (images) {
+    try {
+      // Process and update images
+      const processedImages = await Promise.all(
+        images.map(async (image) => {
+          const filename = `${title.replace(/\s+/g, "-")}-${listingId}`;
+          const fullImagePath = path.join(outputFolder, `${filename}_full.jpg`);
+          const thumbImagePath = path.join(
+            outputFolder,
+            `${filename}_thumb.jpg`
+          );
+
+          const base64DataWithoutPrefix = image.replace(
+            /^data:image\/\w+;base64,/,
+            ""
+          );
+          const binaryData = Buffer.from(base64DataWithoutPrefix, "base64");
+
+          await fs.promises.writeFile(fullImagePath, binaryData);
+
+          await sharp(binaryData)
+            .resize(200)
+            .jpeg({ quality: 50 })
+            .toFile(thumbImagePath);
+
+          const url = `${baseUrl}${filename}_full.jpg`;
+          const thumbnailUrl = `${baseUrl}${filename}_thumb.jpg`;
+
+          return {
+            url,
+            thumbnailUrl,
+            fileName: filename,
+          };
+        })
+      );
+
+      // Replace existing images with processed images
+      listing.images = processedImages;
+    } catch (error) {
+      console.error("Error processing and saving images:", error);
+      return res
+        .status(500)
+        .send({ error: "Error processing and saving images." });
+    }
+  }
+  if (location) {
+    listing.location = location;
+  }
+
+  // Update the listing in the store
+  store.getListings()[listingIndex] = listing;
+
+  const resource = listingMapper(listing);
+  res.send(resource);
+});
+
 // Define the route handler for fetching all listings
 router.get("/", (req, res) => {
   const { userId, categoryId } = req.query; // Get the userId and categoryId from the query parameters
@@ -123,13 +214,13 @@ router.get("/", (req, res) => {
   let filteredListings = listings;
   let userListingsCount = 0;
 
-  console.log("userid", userId)
+  console.log("userid", userId);
   if (userId) {
     // Filter the listings based on the userId
     filteredListings = filteredListings.filter(
       (listing) => listing.userId == userId
     );
-    console.log("userid", userId)
+    console.log("userid", userId);
     userListingsCount = store.countListingsByUserId(userId);
   }
 
@@ -144,9 +235,9 @@ router.get("/", (req, res) => {
 
   const resources = filteredListings.map((listing) => {
     const resource = listingMapper(listing);
-    console.log("user listing count", userListingsCount)
+    console.log("user listing count", userListingsCount);
     resource.userListingsCount = userListingsCount;
-    console.log("resource:", resource)
+    console.log("resource:", resource);
     return resource;
   });
 
@@ -169,28 +260,28 @@ router.get("/search", (req, res) => {
   res.send(resources);
 });
 
-// // New route handler for getting a listing by ID
-// router.get("/:id", (req, res) => {
-//   const { id } = req.params;
+// New route handler for getting a listing by ID
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
 
-//   // Validate that the ID is a positive integer
-//   const listingId = parseInt(id);
-//   if (isNaN(listingId) || listingId <= 0) {
-//     return res.status(400).send({ error: "Invalid listing IDddddd." });
-//   }
+  // Validate that the ID is a positive integer
+  const listingId = parseInt(id);
+  if (isNaN(listingId) || listingId <= 0) {
+    return res.status(400).send({ error: "Invalid listing ID." });
+  }
 
-//   // Find the listing in the store by ID
-//   const listing = store.getListings().find((item) => item.id === listingId);
+  // Find the listing in the store by ID
+  const listing = store.getListing(listingId);
 
-//   // If the listing is not found, return a 404 error
-//   if (!listing) {
-//     return res.status(404).send({ error: "Listing not found." });
-//   }
+  // If the listing is not found, return a 404 error
+  if (!listing) {
+    return res.status(404).send({ error: "Listing not found." });
+  }
 
-//   // Map the listing and send it as a response
-//   const resource = listingMapper(listing);
-//   res.send(resource);
-// });
+  // Map the listing and send it as a response
+  const resource = listingMapper(listing);
+  res.send(resource);
+});
 
 // New route handler for deleting a listing by ID
 router.delete("/:id", (req, res) => {
@@ -213,8 +304,8 @@ router.delete("/:id", (req, res) => {
   // Remove the listing from the store
   store.getListings().splice(index, 1);
 
-  // Send a success response
-  res.status(204).send();
+  // Send a success response with a message confirming the deletion
+  res.status(200).send({ message: "Listing deleted successfully." });
 });
 
 module.exports = router;

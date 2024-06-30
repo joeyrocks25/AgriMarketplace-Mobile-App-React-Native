@@ -1,58 +1,114 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TextInput, TouchableOpacity, Text } from "react-native";
-import useAuth from "../auth/useAuth";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  Platform,
+} from "react-native";
 import { Formik } from "formik";
 import ProfilePhotoPicker from "../components/forms/ProfilePhotoPicker";
 import colors from "../config/colors";
+import authApi from "../api/auth";
+import { deleteUser, updateUser } from "../api/users";
+import useAuth from "../auth/useAuth";
+import { Alert } from "react-native";
 
 function UserProfile() {
-  const { user } = useAuth();
-  console.log(user);
+  const { user, logOut } = useAuth();
+  const auth = useAuth();
 
+  // State variables
   const [editing, setEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...user });
 
+  // Edit button click handler
   const handleEdit = () => {
     setEditing(true);
   };
 
-  const handleSave = () => {
-    // Perform save logic here, e.g., update user data in the backend
-    // Once the save is successful, you can set editing to false to exit edit mode
-    setEditing(false);
+  // Save button click handler
+  const handleSave = async () => {
+    try {
+      const result = await updateUser(editedUser.userId, editedUser);
+      console.log("User updated successfully.");
+      console.log("Updated user:", result.user);
+      setEditing(false);
+
+      const result2 = await authApi.login(
+        editedUser.email,
+        editedUser.password
+      );
+
+      // Refresh the authentication token with the updated user information
+      console.log("User login after update:", result2.data);
+      auth.logIn(result2.data);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
   };
 
-  const handleCancel = () => {
-    // Reset editedUser to original user data and exit edit mode
-    setEditedUser({ ...user });
-    setEditing(false);
+  // Inside the handleDelete function
+  const handleDelete = async () => {
+    try {
+      // Show an alert dialog for confirmation
+      Alert.alert(
+        "Delete Account",
+        "Are you sure you want to delete your account?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            onPress: async () => {
+              // Call the deleteUser function from the API module to delete the user
+              await deleteUser(user.userId);
+              console.log("User deleted successfully.");
+              logOut();
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
+  // Input change handler
   const handleChange = (key, value) => {
-    // Update the editedUser object with the modified field value
     setEditedUser((prevEditedUser) => ({
       ...prevEditedUser,
       [key]: value,
     }));
   };
 
+  // Profile image change handler
   const handleProfileImageChange = (profileImage) => {
-    // Log the profile image when it changes
-    console.log("Profile Image Changed:", profileImage);
+    setEditedUser((prevEditedUser) => ({
+      ...prevEditedUser,
+      profileImage: profileImage,
+    }));
   };
+
+  useEffect(() => {
+    console.log("User:", user);
+  }, [user]);
 
   return (
     <Formik initialValues={{}} onSubmit={() => {}}>
       {({ errors, touched }) => (
         <View style={styles.container}>
           <View style={styles.container2}>
-          <ProfilePhotoPicker
-            name="profileImage" // Assuming the field name is 'profileImage'
-            initialImage={user.profileImage}
-            onChange={handleProfileImageChange}
-            errors={errors} // Pass errors to ProfilePhotoPicker
-            touched={touched} // Pass touched to ProfilePhotoPicker
-          />
+            <ProfilePhotoPicker
+              name="profileImage"
+              initialImage={user.profileImage}
+              onChange={handleProfileImageChange}
+              errors={errors}
+              touched={touched}
+            />
           </View>
           {editing ? (
             <>
@@ -78,10 +134,13 @@ function UserProfile() {
                 secureTextEntry
               />
               <TouchableOpacity style={styles.button} onPress={handleSave}>
-                <Text style={styles.buttonText}>Save</Text>
+                <Text style={styles.buttonText}>Save Changes</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={handleCancel}>
-                <Text style={styles.buttonText}>Cancel</Text>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={handleDelete}
+              >
+                <Text style={styles.buttonText}>Delete Account</Text>
               </TouchableOpacity>
             </>
           ) : (
@@ -95,7 +154,13 @@ function UserProfile() {
                 secureTextEntry
               />
               <TouchableOpacity style={styles.button} onPress={handleEdit}>
-                <Text style={styles.buttonText}>Edit</Text>
+                <Text style={styles.buttonText}>Edit Details</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={handleDelete}
+              >
+                <Text style={styles.buttonText}>Delete Account</Text>
               </TouchableOpacity>
             </>
           )}
@@ -105,6 +170,7 @@ function UserProfile() {
   );
 }
 
+// Editable input field component
 function EditableField({ label, value, onChange, secureTextEntry = false }) {
   return (
     <View style={styles.fieldContainer}>
@@ -121,8 +187,13 @@ function EditableField({ label, value, onChange, secureTextEntry = false }) {
   );
 }
 
+// Read-only input field component
 function ReadOnlyField({ label, value, secureTextEntry = false }) {
-  const maskedValue = value ? (secureTextEntry ? "*".repeat(value.length) : value) : "";
+  const maskedValue = value
+    ? secureTextEntry
+      ? "*".repeat(value.length)
+      : value
+    : "";
 
   return (
     <View style={styles.fieldContainer}>
@@ -142,17 +213,13 @@ function ReadOnlyField({ label, value, secureTextEntry = false }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 50,
+    paddingHorizontal: 50,
+    marginTop: Platform.OS === "ios" ? 100 : 29,
   },
   container2: {
-    justifyContent: "center", // Vertical alignment
-    alignItems: "center",     // Horizontal alignment
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: -30,
-    marginBottom: 20,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
     marginBottom: 20,
   },
   fieldContainer: {
@@ -175,6 +242,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginTop: 20,
+  },
+  deleteButton: {
+    backgroundColor: "red",
+    borderRadius: 5,
+    padding: 10,
+    marginTop: 10,
   },
   buttonText: {
     color: "white",

@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 10,
     borderWidth: 0.5,
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
   },
   icon: {
     marginRight: 10,

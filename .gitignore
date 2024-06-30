@@ -8,3 +8,7 @@ chatbot/.rasa
 
 # chatbot models
 chatbot/models
+
+# node modules
+
+node_modules

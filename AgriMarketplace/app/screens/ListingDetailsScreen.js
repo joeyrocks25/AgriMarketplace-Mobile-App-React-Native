@@ -24,6 +24,7 @@ import useAuth from "../auth/useAuth";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import CardSuggestions from "../components/CardSuggestions";
 import routes from "../navigation/routes";
+import { Platform } from "react-native";
 
 function CustomAvatar({ imageUri, username, userListingsCount, onPress }) {
   const listingsText = userListingsCount === 1 ? "Listing" : "Listings";
@@ -53,17 +54,12 @@ function CustomAvatar({ imageUri, username, userListingsCount, onPress }) {
   );
 }
 
+// Main component for the listing details screen
 function ListingDetailsScreen({ route, onScreenFocus }) {
   const scrollViewRef = useRef();
   const { item, origin } = route.params;
   const categoryId = route.params?.item?.categoryId;
-  const userId = item.userId;
-
-  console.log("useridddd is ", userId);
-
-  if (userId === undefined) {
-    console.log("Category ID is undefined:", route.params);
-  }
+  const userId = item ? item.userId : null;
 
   const navigation = useNavigation();
   const isFocused = useIsFocused();
@@ -71,34 +67,12 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
   const location = useLocation();
   const { user } = useAuth();
   let userLocation = null;
-  console.log("uzrrrr id", item);
-
-  const getListingsApi = useApi(() =>
-    listingsApi.getListings(null, categoryId)
-  );
-
-  useEffect(() => {
-    getListingsApi.request();
-  }, [categoryId]);
-
-  useEffect(() => {
-    if (isFocused) {
-      console.log("ListingDetailsScreen is focused1");
-      onScreenFocus && onScreenFocus(true);
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
-    } else {
-      console.log("ListingDetailsScreen is unfocused1");
-      onScreenFocus && onScreenFocus(false);
-    }
-  }, [isFocused, onScreenFocus]);
 
   if (location) {
     userLocation = {
       latitude: location.latitude,
       longitude: location.longitude,
     };
-  } else {
-    console.log("Location is not available");
   }
 
   const sellerLocation =
@@ -117,10 +91,10 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loadingFavorite, setLoadingFavorite] = useState(false);
 
+  // Function to handle adding item to favorites
   const handleFavoritePress = async () => {
     try {
       if (isFavorite) {
-        console.log("Already favorited.");
         return;
       }
 
@@ -139,7 +113,6 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
       };
 
       await favouritesApi.addFavourite(newFavourite);
-      console.log("Favorite added");
 
       setIsFavorite(true);
       setLoadingFavorite(false);
@@ -149,21 +122,30 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
     }
   };
 
+  // Function to handle press event for looking for haulers
   const handleLookingForHaulersPress = () => {
     navigation.navigate(routes.HAULERS_SCREEN, {
       onScreenFocus: onScreenFocus,
     });
-
-    console.log("Clicked on 'Looking for local haulers'");
   };
 
   const [userListingsCount, setUserListingsCount] = useState(0);
   const [userDetails, setUserDetails] = useState(null);
   const [listingDescription, setListingDescription] = useState("");
 
+  const getListingsApi = useApi(() =>
+    listingsApi.getListings(null, categoryId)
+  );
+
+  useEffect(() => {
+    getListingsApi.request();
+  }, [categoryId]);
+
   useEffect(() => {
     const fetchListings = async () => {
       try {
+        if (!userId) return;
+
         const response = await listingsApi.getListings(userId, null);
 
         if (response.data.length > 0) {
@@ -184,9 +166,10 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
 
     const fetchUser = async () => {
       try {
+        if (!userId) return;
+
         const response = await usersApi.getUser(userId);
         setUserDetails(response);
-        console.log("Fetched User:", response.data);
       } catch (error) {
         console.log("Error fetching user:", error);
       }
@@ -196,6 +179,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
     fetchUser();
   }, [userId, isFocused, categoryId]);
 
+  // Function to toggle full description view
   const [formVisible, setFormVisible] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -205,7 +189,11 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior="padding"
+      keyboardVerticalOffset={Platform.select({
+        ios: 100,
+        android: -550,
+      })}
       style={{ flex: 1 }}
     >
       <ScrollView ref={scrollViewRef} style={styles.scrollView}>
@@ -221,7 +209,10 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
               <View style={styles.titleFavoriteContainer}>
                 <Text style={styles.title}>{item.title}</Text>
                 <View style={styles.favoriteContainer}>
-                  <TouchableWithoutFeedback onPress={handleFavoritePress}>
+                  <TouchableWithoutFeedback
+                    onPress={handleFavoritePress}
+                    testID="favorite-button"
+                  >
                     <FontAwesome
                       name={isFavorite ? "heart" : "heart-o"}
                       size={28}
@@ -260,15 +251,13 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
         <View style={{ marginTop: 20 }}>
           {userDetails && (
             <React.Fragment>
-              {console.log("UserDetails:", userDetails.data)}
-              {console.log("user datas", userDetails.data)}
               <CustomAvatar
-                imageUri={userDetails.data.profileImage}
-                username={userDetails.data.username}
+                imageUri={userDetails.profileImage}
+                username={userDetails.username}
                 userListingsCount={userListingsCount}
                 onPress={() => {
                   navigation.navigate(routes.SELLER_DETAILS, {
-                    userDetailsData: userDetails.data,
+                    userDetailsData: userDetails,
                   });
                 }}
               />
@@ -276,7 +265,10 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
           )}
           <View style={styles.shadowContainer}>
             <View style={styles.lookingForHaulersContainer}>
-              <TouchableWithoutFeedback onPress={handleLookingForHaulersPress}>
+              <TouchableWithoutFeedback
+                onPress={handleLookingForHaulersPress}
+                testID="looking-for-haulers-link"
+              >
                 <View>
                   <Text style={styles.lookingForHaulersText}>
                     Looking for local haulers in your area? Click here!
@@ -301,8 +293,9 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
                 {listingDescription !== "" && (
                   <React.Fragment>
                     <Text
-                      numberOfLines={showFullDescription ? undefined : 2}
+                      numberOfLines={showFullDescription ? undefined : 1}
                       style={styles.description}
+                      testID="description-text"
                     >
                       {listingDescription}
                     </Text>
@@ -354,11 +347,7 @@ function ListingDetailsScreen({ route, onScreenFocus }) {
         </View>
       </ScrollView>
       <View style={styles.ContactSellerForm}>
-        <ContactSellerForm
-          listing={item}
-          visible={formVisible}
-          // onClose={() => setFormVisible(true)}
-        />
+        <ContactSellerForm listing={item} visible={formVisible} />
       </View>
     </KeyboardAvoidingView>
   );
@@ -381,7 +370,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     backgroundColor: colors.white,
     borderWidth: 0.6,
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
   },
   youMayAlsoLike: {
     marginTop: 20,
@@ -389,7 +378,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: colors.white,
     borderWidth: 0.6,
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
   },
   youMayAlsoLikeText: {
     fontSize: 18,
@@ -456,10 +445,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: 5,
     borderWidth: 0.6,
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
   },
   avatarContainer: {
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
     borderWidth: 2,
     borderRadius: 37.5,
     overflow: "hidden",
@@ -489,7 +478,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
     borderWidth: 0.6,
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
   },
   lookingForHaulersText: {
     fontSize: 16,
@@ -503,7 +492,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "94%",
     borderWidth: 0.6,
-    borderColor: colors.test2,
+    borderColor: colors.grey_border,
   },
   keyDetailsTitle: {
     fontSize: 18,
@@ -530,6 +519,7 @@ const styles = StyleSheet.create({
   },
   ContactSellerForm: {
     backgroundColor: colors.white,
+    marginBottom: -10,
   },
   arrowIcon: {
     marginLeft: "auto",

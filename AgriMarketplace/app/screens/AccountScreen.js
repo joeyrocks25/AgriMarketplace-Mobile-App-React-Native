@@ -7,6 +7,7 @@ import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import useAuth from "../auth/useAuth";
 
+// Array of menu items for the account screen
 const menuItems = [
   {
     title: "My Profile",
@@ -34,8 +35,8 @@ const menuItems = [
   },
 ];
 
+// Custom avatar component
 function CustomAvatar({ imageUri, name, email }) {
-  console.log("image uri", imageUri)
   return (
     <View style={styles.container2}>
       <View style={styles.avatarContainer}>
@@ -49,13 +50,13 @@ function CustomAvatar({ imageUri, name, email }) {
   );
 }
 
+// Account screen component
 function AccountScreen({ navigation }) {
   const { user, logOut } = useAuth();
 
-  console.log("user = ",user)
-
   return (
     <Screen style={styles.screen}>
+      {/* User info section */}
       <View style={styles.container1}>
         <CustomAvatar
           imageUri={user.profileImage}
@@ -63,6 +64,7 @@ function AccountScreen({ navigation }) {
           email={user.email}
         />
       </View>
+      {/* Menu items section */}
       <View style={styles.container}>
         <FlatList
           data={menuItems}
@@ -82,6 +84,7 @@ function AccountScreen({ navigation }) {
           )}
         />
       </View>
+      {/* Log out button */}
       <ListItem
         title="Log Out"
         IconComponent={
@@ -109,9 +112,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.white,
     padding: 4,
-    // borderRadius: 18,
-    // borderColor: colors.black,
-    // borderWidth: 1,
   },
   container2: {
     marginLeft: 5,

@@ -11,18 +11,25 @@ import Button from "../components/Button";
 import useApi from "../hooks/useApi";
 import useAuth from "../auth/useAuth";
 
+// User Listings Screen component
 function UserListingsScreen({ navigation }) {
+  // Get authenticated user
   const { user } = useAuth();
+
+  // State to trigger refresh of listings
   const [refreshKey, setRefreshKey] = useState(0);
 
+  // API hook to fetch user listings
   const getUserListingsApi = useApi(() =>
     listingsApi.getListings(user.userId, null)
   );
 
+  // Fetch user listings on component mount and refreshKey change
   useEffect(() => {
     getUserListingsApi.request();
   }, [refreshKey]);
 
+  // Handler to refresh user listings
   const handleRefreshListings = () => {
     // Increment the key to trigger a refresh
     setRefreshKey((prevKey) => prevKey + 1);
@@ -30,10 +37,12 @@ function UserListingsScreen({ navigation }) {
 
   return (
     <Screen style={styles.screen}>
+      {/* Show loading indicator while fetching listings */}
       {getUserListingsApi.loading ? (
         <ActivityIndicator visible={true} />
       ) : (
         <>
+          {/* FlatList to render user listings */}
           <FlatList
             numColumns={2}
             data={getUserListingsApi.data}
@@ -47,12 +56,17 @@ function UserListingsScreen({ navigation }) {
                   customHeight={125}
                   listingId={item.id}
                   onDelete={handleRefreshListings}
-                  onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
+                  onPress={() =>
+                    navigation.navigate(routes.LISTING_DETAILS, item)
+                  }
+                  iconName="delete" // Specify the icon to display
+                  setRefreshKey={setRefreshKey}
                 />
               </View>
             )}
           />
 
+          {/* Show error message and retry button if fetching listings fails */}
           {getUserListingsApi.error && (
             <View style={styles.errorContainer}>
               <AppText style={styles.errorText}>

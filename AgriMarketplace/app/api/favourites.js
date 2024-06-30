@@ -18,7 +18,7 @@ export const getFavourites = async (currentUserId) => {
       client.getBaseURL() +
       endpoint +
       (queryString !== "" ? `?${queryString}` : "");
-    console.log("API Endpoint:", fullEndpoint); // Log the endpoint
+    console.log("Get Favourites API Endpoint:", fullEndpoint); // Log the endpoint
 
     const response = await client.get(fullEndpoint);
     return response;
@@ -30,7 +30,28 @@ export const getFavourites = async (currentUserId) => {
 
 export const addFavourite = async (favourite) => {
   try {
-    const response = await client.post(endpoint, favourite);
+    const fullEndpoint = client.getBaseURL() + endpoint;
+    console.log("Add Favourite API Endpoint:", fullEndpoint); // Log the endpoint
+
+    const fullRegisterEndpoint = fullEndpoint + "/add";
+    console.log("API Endpoint favourite add:", fullRegisterEndpoint);
+
+    console.log("favourite ", favourite);
+
+    const response = await client.post(fullRegisterEndpoint, favourite);
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const deleteFavouriteById = async (favouriteId) => {
+  try {
+    const fullEndpoint = endpoint + `/${favouriteId}`;
+    console.log("Delete Favourite API Endpoint:", fullEndpoint); // Log the endpoint
+
+    const response = await client.delete(fullEndpoint);
     return response.data;
   } catch (error) {
     console.error("Error:", error);
@@ -41,4 +62,5 @@ export const addFavourite = async (favourite) => {
 export default {
   addFavourite,
   getFavourites,
+  deleteFavouriteById,
 };

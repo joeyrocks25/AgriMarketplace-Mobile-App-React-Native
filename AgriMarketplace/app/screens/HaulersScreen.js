@@ -10,6 +10,7 @@ import {
 import ModalDropdown from "react-native-modal-dropdown";
 import { useIsFocused } from "@react-navigation/native";
 
+// Data for counties
 const countiesData = [
   "All Counties",
   "Antrim",
@@ -20,6 +21,7 @@ const countiesData = [
   "Fermanagh",
 ];
 
+// Data for haulers
 const haulersData = [
   {
     id: 1,
@@ -79,8 +81,9 @@ const haulersData = [
     contactNumber: "+44 7712 345678",
     emailAddress: "info@fermanaghfreight.com",
   },
-  // Add more haulers as needed
 ];
+
+// Component for displaying hauler details
 const HaulerHUD = ({ name, rating, services, contactNumber, emailAddress }) => (
   <TouchableOpacity
     style={styles.haulerHUDContainer}
@@ -96,24 +99,26 @@ const HaulerHUD = ({ name, rating, services, contactNumber, emailAddress }) => (
   </TouchableOpacity>
 );
 
+// Component for the hauler screen
 const HaulerScreen = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const [selectedCounty, setSelectedCounty] = useState(null);
 
   useEffect(() => {
     if (isFocused) {
-      console.log("RegisterScreen is focused");
+      console.log("HaulerScreen is focused");
       route.params &&
         route.params.onScreenFocus &&
         route.params.onScreenFocus(true);
     } else {
-      console.log("RegisterScreen is unfocused");
+      console.log("HaulerScreen is unfocused");
       route.params &&
         route.params.onScreenFocus &&
         route.params.onScreenFocus(false);
     }
   }, [isFocused, route.params]);
 
+  // Handle county selection
   const handleCountySelect = (index, value) => {
     setSelectedCounty(value === "All Counties" ? null : value);
   };
@@ -156,14 +161,13 @@ const HaulerScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 60,
     flex: 1,
     padding: 16,
   },
   headerText: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 0,
+    marginTop: 10,
   },
   dropdownContainer: {
     width: 300,
@@ -177,9 +181,9 @@ const styles = StyleSheet.create({
   },
 
   dropdownList: {
-    width: 300, // Adjust the width as needed
+    width: 300,
     position: "absolute",
-    top: "100%", // Position it just below the dropdown container
+    top: "100%",
     borderRadius: 2,
     borderWidth: 1,
     borderColor: "#ccc",

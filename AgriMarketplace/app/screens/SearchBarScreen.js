@@ -15,14 +15,20 @@ import DistanceCalculator from "../components/DistanceCalculator";
 import useLocation from "../hooks/useLocation";
 import { useFocusEffect } from "@react-navigation/native";
 import routes from "../navigation/routes";
+import { Platform } from "react-native";
+import colors from "../config/colors";
+import AppText from "../components/Text";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function SearchBarScreen({ navigation }) {
+  // State for search functionality
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const location = useLocation();
   const inputRef = useRef(null);
 
+  // Focus on search input when screen is focused
   useFocusEffect(
     React.useCallback(() => {
       if (inputRef.current) {
@@ -31,12 +37,14 @@ function SearchBarScreen({ navigation }) {
     }, [])
   );
 
+  // Cancel search and clear input
   const handleCancel = () => {
     setSearchText("");
     Keyboard.dismiss();
     setSearchResults([]);
   };
 
+  // Handle search functionality
   const handleSearch = async () => {
     try {
       console.log("Searching for:", searchText);
@@ -56,12 +64,14 @@ function SearchBarScreen({ navigation }) {
     }
   };
 
+  // Handle form submission
   const handleSubmit = () => {
     handleSearch();
   };
 
   return (
     <View style={styles.container}>
+      {/* Search bar */}
       <View style={styles.searchBar}>
         <FontAwesome
           name="search"
@@ -78,7 +88,7 @@ function SearchBarScreen({ navigation }) {
           onFocus={() => setIsSearchActive(true)}
           onBlur={() => setIsSearchActive(false)}
           value={searchText}
-          onSubmitEditing={handleSubmit} // Handle form submission
+          onSubmitEditing={handleSubmit}
         />
         {isSearchActive && (
           <TouchableOpacity onPress={handleCancel}>
@@ -86,6 +96,8 @@ function SearchBarScreen({ navigation }) {
           </TouchableOpacity>
         )}
       </View>
+
+      {/* Search results */}
       <View style={styles.cardContainer}>
         {searchResults && searchResults.length > 0 ? (
           <FlatList
@@ -94,7 +106,16 @@ function SearchBarScreen({ navigation }) {
             renderItem={({ item }) => (
               <Card
                 title={item.title}
-                subTitle={`£${item.price}`}
+                subTitle={
+                  <AppText style={styles.price}>
+                    <MaterialCommunityIcons
+                      name="currency-gbp"
+                      size={18}
+                      color={colors.dark_green}
+                    />
+                    {item.price}
+                  </AppText>
+                }
                 imageUrl={item.images[0].url}
                 customHeight={200}
                 onPress={() => {
@@ -170,6 +191,10 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
     marginTop: 10,
+  },
+  price: {
+    color: colors.dark_green,
+    fontSize: 18,
   },
 });
 

@@ -3,7 +3,7 @@ const listings = [
     id: 1,
     title: "Cow",
     description:
-      "Female beef cow, brown and white, suitable for meat production, healthy and docile.",
+      "Female beef cow, brown and white, suitable for meat production, healthy and docile. This cow has been raised in a pasture-based system and is accustomed to grazing on grass.",
     images: [{ fileName: "cow1" }],
     price: 1000,
     categoryId: 1,
@@ -16,7 +16,8 @@ const listings = [
   {
     id: 2,
     title: "Tractor in great condition",
-    description: "Kept well, tidy yoke.",
+    description:
+      "This tractor has been meticulously maintained and is in excellent condition. It has low hours and has never been used for heavy-duty work. Ideal for small to medium-sized farms.",
     images: [{ fileName: "tractor2" }],
     categoryId: 3,
     price: 35000,
@@ -28,9 +29,9 @@ const listings = [
   },
   {
     id: 3,
-    title: "cultivator (great condition) - delivery included",
-    // description:
-    //   "I'm selling my furniture at a discount price. Pick up at Venice. DM me asap.",
+    title: "Cultivator (great condition) - delivery included",
+    description:
+      "This cultivator is in great condition and comes with free delivery within a 50-mile radius. It's perfect for preparing soil for planting and is easy to maneuver.",
     images: [{ fileName: "cultivator3" }],
     price: 1000,
     categoryId: 2,
@@ -42,7 +43,9 @@ const listings = [
   },
   {
     id: 100,
-    title: "mk7 golf",
+    title: "Mk7 Golf",
+    description:
+      "Sleek and stylish Mk7 Golf in excellent condition. Low mileage, well-maintained, and perfect for city driving or long trips. Comes with a full service history and clean interior.",
     images: [{ fileName: "golf4" }],
     categoryId: 4,
     price: 100,
@@ -55,6 +58,8 @@ const listings = [
   {
     id: 4,
     title: "Bull",
+    description:
+      "Sturdy bull suitable for breeding. This bull has a proven track record of siring healthy calves with excellent growth rates. Vaccinated and dewormed regularly.",
     images: [{ fileName: "bull1" }],
     categoryId: 1,
     price: 2000,
@@ -66,7 +71,9 @@ const listings = [
   },
   {
     id: 5,
-    title: "sheep",
+    title: "Sheep",
+    description:
+      "Healthy and woolly sheep available for sale. These sheep are well-fed and have been regularly sheared. Suitable for breeding or for wool production.",
     images: [{ fileName: "sheep1" }],
     categoryId: 1,
     price: 100,
@@ -78,7 +85,9 @@ const listings = [
   },
   {
     id: 6,
-    title: "Few calves",
+    title: "Few Calves",
+    description:
+      "Group of lively calves available for purchase. These calves are strong and healthy, raised on a diet of high-quality milk and hay. Perfect for starting your own herd.",
     images: [{ fileName: "calves1" }],
     categoryId: 1,
     price: 800,
@@ -90,7 +99,9 @@ const listings = [
   },
   {
     id: 7,
-    title: "Trailer sprayer",
+    title: "Trailer Sprayer",
+    description:
+      "Durable and efficient trailer sprayer for sale. Suitable for applying fertilizers, herbicides, or pesticides. Features a large tank capacity and adjustable spray nozzles.",
     images: [{ fileName: "trailed_sprayer1" }],
     categoryId: 2,
     price: 500,
@@ -102,7 +113,9 @@ const listings = [
   },
   {
     id: 8,
-    title: "Jumbo ripper",
+    title: "Jumbo Ripper",
+    description:
+      "Heavy-duty jumbo ripper designed for breaking up hard soil and preparing it for planting. Features multiple tines and sturdy construction for long-lasting performance.",
     images: [{ fileName: "jumbo_ripper1" }],
     categoryId: 2,
     price: 700,
@@ -114,7 +127,9 @@ const listings = [
   },
   {
     id: 9,
-    title: "Used tractor",
+    title: "Used Tractor",
+    description:
+      "Reliable used tractor available for purchase. This tractor has served its previous owner well and is ready for a new home. Suitable for a variety of agricultural tasks.",
     images: [{ fileName: "tractor3" }],
     categoryId: 3,
     price: 50000,
@@ -127,6 +142,8 @@ const listings = [
   {
     id: 10,
     title: "Tractor",
+    description:
+      "Brand new tractor available for sale. This tractor is loaded with features and is perfect for heavy-duty agricultural work. Comes with a warranty and financing options.",
     images: [{ fileName: "tractor4" }],
     categoryId: 3,
     price: 75000,
@@ -167,7 +184,6 @@ const searchListings = (searchText) => {
 const countListingsByUserId = (userId) => {
   return listings.filter((listing) => listing.userId === userId).length;
 };
-
 
 module.exports = {
   addListing,

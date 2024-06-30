@@ -1,5 +1,4 @@
 import { create } from "apisauce";
-import axios from "axios";
 import authStorage from "../auth/storage";
 
 const apiClient = create({
@@ -14,6 +13,10 @@ axiosInstance.interceptors.request.use(
   async (config) => {
     const authToken = await authStorage.getToken();
     config.headers["x-auth-token"] = authToken;
+
+    // Log the endpoint
+    // console.log("API Endpoint:", config.baseURL + config.url);
+
     return config;
   },
   (error) => {

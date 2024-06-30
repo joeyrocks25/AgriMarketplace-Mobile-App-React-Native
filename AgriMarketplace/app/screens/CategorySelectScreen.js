@@ -1,9 +1,16 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, TouchableOpacity, Text, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  Dimensions,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 
+// Define categories with their respective properties
 const categories = [
   {
     backgroundColor: colors.livestock,
@@ -44,19 +51,16 @@ const categories = [
 ];
 
 function CategoryHUDScreen({ onScreenFocus }) {
+  // Navigation and focus management hooks
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
+  // Effect hook to handle screen focus changes
   useEffect(() => {
-    if (isFocused) {
-      console.log("CategorySelectScreen is focused2");
-      onScreenFocus && onScreenFocus(true);
-    } else {
-      console.log("CategorySelectScreen is unfocused2");
-      onScreenFocus && onScreenFocus(false);
-    }
+    onScreenFocus && onScreenFocus(isFocused);
   }, [isFocused, onScreenFocus]);
 
+  // Function to handle category button press
   const handleButtonPress = (category) => {
     navigation.navigate("Listings", {
       categoryId: category.value,
@@ -65,9 +69,12 @@ function CategoryHUDScreen({ onScreenFocus }) {
     });
   };
 
+  // Render component
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Explore Categories</Text>
+      <Text testID="title" style={styles.title}>
+        Explore Categories
+      </Text>
       <View style={styles.buttonContainer}>
         {categories.map((category) => (
           <TouchableOpacity
@@ -77,6 +84,7 @@ function CategoryHUDScreen({ onScreenFocus }) {
               { backgroundColor: category.backgroundColor },
             ]}
             onPress={() => handleButtonPress(category)}
+            testID="categoryButton"
           >
             <MaterialCommunityIcons
               name={category.icon}
@@ -91,6 +99,7 @@ function CategoryHUDScreen({ onScreenFocus }) {
   );
 }
 
+// Styles for the component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -101,7 +110,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 0,
     color: colors.medium,
     marginTop: 70,
   },
@@ -128,4 +136,6 @@ const styles = StyleSheet.create({
   },
 });
 
+// Export the component and categories array
 export default CategoryHUDScreen;
+export { categories };

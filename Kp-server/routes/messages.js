@@ -71,16 +71,16 @@ router.post("/", [auth, validateWith(schema)], async (req, res) => {
   // Get the listing from the store
   const listing = listingsStore.getListing(listingId);
   if (!listing) return res.status(400).send({ error: "Invalid listingId." });
-  
+
   const targetUser = usersStore.getUserById(listing.userId);
   if (!targetUser) return res.status(400).send({ error: "Invalid userId." });
-  
+
   // Assuming listing.userId and req.user.userId are UUIDs
   const userId1 = req.user.userId;
   const userId2 = listing.userId;
-  
+
   // Generate a consistent conversation ID based on user IDs and listing ID
-  const conversationId = [userId1, userId2, listingId].sort().join('-');
+  const conversationId = [userId1, userId2, listingId].sort().join("-");
 
   // Pass the conversationId to the add function
   messagesStore.add(conversationId, {

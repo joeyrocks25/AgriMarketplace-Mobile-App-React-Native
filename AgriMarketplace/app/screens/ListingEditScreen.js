@@ -15,6 +15,7 @@ import FabButton from "../components/forms/FabButton";
 import FabButtonCancel from "../components/forms/FabButtonCancel";
 import defaultStyles from "../config/styles";
 
+// Define validation schema using Yup
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
   price: Yup.number().required().min(1).max(10000).label("Price"),
@@ -23,6 +24,7 @@ const validationSchema = Yup.object().shape({
   images: Yup.array().min(0, "Please select at least one image."),
 });
 
+// Define categories for the picker
 const categories = [
   {
     backgroundColor: "#fc5c65",
@@ -62,10 +64,12 @@ const categories = [
   },
 ];
 
+// ListingEditScreen component
 function ListingEditScreen({ navigation }) {
   const { user } = useAuth();
   const location = useLocation();
 
+  // Function to convert Blob to base64
   const convertBlobToBase64 = async (blob) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -77,6 +81,7 @@ function ListingEditScreen({ navigation }) {
     });
   };
 
+  // Function to handle form submission
   const handleSubmit = async (listing, { resetForm }) => {
     const { category, ...rest } = listing;
     const categoryId = category ? category.value : null;
@@ -114,6 +119,7 @@ function ListingEditScreen({ navigation }) {
     }
   };
 
+  // Function to handle cancel action
   const handleCancel = (resetForm) => {
     // Reset the form to initial values
     resetForm();
