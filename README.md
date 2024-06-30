@@ -1,7 +1,6 @@
-Overview
-Agrimarketplace is a React Native mobile app designed for the agriculture industry. It offers cross-platform functionality, running on both iOS and Android devices, with a user-friendly design to improve agricultural transactions.
+Overview: Agrimarketplace is a React Native mobile app designed for the agriculture industry. It offers cross-platform functionality, running on both iOS and Android devices, with a user-friendly design to improve agricultural transactions.
 
-Key Features
+Key Features: 
     Cross-Platform Functionality: Available on both iOS and Android devices.
     User-Friendly Design: Simple and intuitive interface aimed at target audience.
     Secure Account Creation and Management: Protects user data and provides secure access.
