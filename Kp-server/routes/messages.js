@@ -75,11 +75,10 @@ router.post("/", [auth, validateWith(schema)], async (req, res) => {
   const targetUser = usersStore.getUserById(listing.userId);
   if (!targetUser) return res.status(400).send({ error: "Invalid userId." });
 
-  // Assuming listing.userId and req.user.userId are UUIDs
   const userId1 = req.user.userId;
   const userId2 = listing.userId;
 
-  // Generate a consistent conversation ID based on user IDs and listing ID
+  // Generate a conversation ID based on user IDs and listing ID
   const conversationId = [userId1, userId2, listingId].sort().join("-");
 
   // Pass the conversationId to the add function
@@ -88,10 +87,9 @@ router.post("/", [auth, validateWith(schema)], async (req, res) => {
     toUserId: listing.userId,
     listingId,
     content: message,
-    conversationId, // Use the generated conversation ID
+    conversationId,
   });
 
-  // Log the request headers
   console.log("Request Headers:", req.headers);
 
   const { expoPushToken } = targetUser;
@@ -107,7 +105,7 @@ router.post(
   "/reply/:conversationId",
   [auth, validateWith(schema)],
   async (req, res) => {
-    const { conversationId } = req.params; // Get conversationId from URL
+    const { conversationId } = req.params;
     const { message } = req.body;
 
     // Find the conversation in your data store
@@ -120,17 +118,16 @@ router.post(
     const newMessage = {
       id: uuidv4(),
       fromUserId: req.user.userId,
-      toUserId: conversation[0].fromUserId, // Assuming you're replying to the sender
+      toUserId: conversation[0].fromUserId,
       listingId: conversation[0].listingId,
       content: message,
       dateTime: Date.now(),
       conversationId,
     };
 
-    // Use the add function to add the new message to the conversation
+    // add new message to the conversation
     messagesStore.add(conversationId, newMessage);
 
-    // Log the new message
     console.log("New Reply Message:", newMessage);
 
     res.status(201).send();

@@ -1,5 +1,3 @@
-// favouritesStore.js
-
 const favourites = [];
 
 const addFavourite = (favourite) => {

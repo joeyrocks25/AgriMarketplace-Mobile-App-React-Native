@@ -1,3 +1,4 @@
+// Dummy data
 const categories = [
   {
     id: 1,

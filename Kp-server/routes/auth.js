@@ -36,10 +36,9 @@ router.post("/login", (req, res) => {
       email,
       profileImage,
     },
-    "jwtPrivateKey" // Replace with your actual private key
+    "jwtPrivateKey" // I can update this in future
   );
 
-  // Log the token
   console.log("Token:", token);
 
   res.send(token);

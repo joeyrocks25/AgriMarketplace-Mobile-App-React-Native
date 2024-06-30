@@ -1,9 +1,8 @@
-// messages.js
 const usersStore = require("../store/users");
 const { v4: uuidv4 } = require("uuid");
 
 const messages = [
-  // existing messages...
+  // Dummy data
 ];
 
 // Create a global variable to store conversation IDs
@@ -51,7 +50,6 @@ const getConversationsForUser = (userId) => {
 };
 
 const getMessagesForConversation = (conversationId) => {
-  // Fetch messages for the specified conversationId from your data store
   console.log("messages = ", messages);
   const messagesForConversation = messages.filter(
     (message) => message.conversationId === conversationId
@@ -61,10 +59,9 @@ const getMessagesForConversation = (conversationId) => {
 };
 
 const add = (conversationId, message) => {
-  // Generate a unique identifier using uuid for the new message
   message.id = uuidv4();
   message.dateTime = Date.now();
-  message.conversationId = conversationId; // Add this line to set the conversation ID
+  message.conversationId = conversationId;
 
   messages.push(message);
 };
@@ -77,7 +74,7 @@ const addMessageToConversation = (conversationId, newMessage) => {
   if (conversation) {
     conversation.messages.push(newMessage);
   } else {
-    // If conversation not found, you might want to handle this case
+    // note add error handling
     console.log("Conversation not found while adding message.");
   }
 };

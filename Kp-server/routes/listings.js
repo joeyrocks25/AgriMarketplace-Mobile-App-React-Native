@@ -13,12 +13,12 @@ const config = require("config");
 const outputFolder = path.join(__dirname, "../public/assets");
 const baseUrl = config.get("assetsBaseUrl");
 
-// Define the route handler for creating a new listing
+// Route handler for creating a new listing
 router.post("/", async (req, res) => {
   const { title, price, categoryId, description, images, location, userId } =
     req.body;
 
-  console.log("Request Body:", req.body); // Add this line to log the request body
+  console.log("Request Body:", req.body);
 
   // Validate the request body
   if (!title || !price || !categoryId) {
@@ -36,7 +36,6 @@ router.post("/", async (req, res) => {
     return res.status(400).send({ error: "Maximum image count exceeded." });
   }
 
-  // Generate a UUID
   const uuid = uuidv4();
 
   // Image processing and saving logic
@@ -76,7 +75,7 @@ router.post("/", async (req, res) => {
           return {
             url,
             thumbnailUrl,
-            fileName: filename, // Set the fileName property to the generated filename
+            fileName: filename,
           };
         })
       );
@@ -100,7 +99,7 @@ router.post("/", async (req, res) => {
     description: description || "",
     images: images.map((image) => ({
       ...image,
-      fileName: `${title.replace(/\s+/g, "-")}-${uuid}`, // Assign the same UUID as the filename
+      fileName: `${title.replace(/\s+/g, "-")}-${uuid}`, // note assign same UUID as the filename
     })),
     location: location || null,
     userId,
@@ -205,10 +204,9 @@ router.put("/:id", async (req, res) => {
   res.send(resource);
 });
 
-// Define the route handler for fetching all listings
+// Route handler for fetching all listings
 router.get("/", (req, res) => {
-  const { userId, categoryId } = req.query; // Get the userId and categoryId from the query parameters
-
+  const { userId, categoryId } = req.query;
   const listings = store.getListings();
 
   let filteredListings = listings;

@@ -1,4 +1,3 @@
-// conversationStore.js
 const conversationKeyToIdMap = {};
 
 const setConversationIdForKey = (conversationKey, conversationId) => {

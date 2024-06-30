@@ -1,3 +1,4 @@
+// Dummy data
 const listings = [
   {
     id: 1,

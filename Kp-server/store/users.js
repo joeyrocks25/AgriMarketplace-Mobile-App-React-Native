@@ -1,3 +1,4 @@
+// Dummy data
 const users = [
   {
     id: "34ffda8f-7492-4a52-a80c-76f5a8a431e00",
@@ -6,7 +7,7 @@ const users = [
     email: "jr123@gmail.com",
     password: "Ireland14",
     profileImage:
-      "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg", // Add the profileImage property
+      "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg",
   },
   {
     id: "2",
@@ -15,7 +16,7 @@ const users = [
     email: "kp@gmail.com",
     password: "Ireland14",
     profileImage:
-      "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg", // Add the profileImage property
+      "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg",
   },
   {
     id: "3",
@@ -24,7 +25,7 @@ const users = [
     email: "1",
     password: "1",
     profileImage:
-      "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg", // Add the profileImage property
+      "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg",
   },
   {
     id: "4",
@@ -33,7 +34,7 @@ const users = [
     email: "test_user1@gmail.com",
     password: "test_user1123@",
     profileImage:
-      "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg", // Add the profileImage property
+      "http://192.168.1.130:9000/assets/default_profile_photo_full.jpg",
   },
 ];
 
@@ -73,5 +74,5 @@ module.exports = {
   getUserById,
   addUser,
   updateUser,
-  deleteUser, // Add the deleteUser function
+  deleteUser,
 };

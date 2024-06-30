@@ -10,7 +10,7 @@ const config = require("config");
 const outputFolder = path.join(__dirname, "../public/assets");
 const baseUrl = config.get("assetsBaseUrl");
 
-// Define a user mapper function
+// User mapper function
 const userMapper = (user) => {
   const mappedUser = {
     id: user.id,
